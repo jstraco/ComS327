@@ -1,0 +1,29 @@
+#include <stdio.h>
+
+void printArray(int[][] a){
+  int i,j;
+  for(j=0;j<23;j++){
+    for(i=0;i<23;i++){
+      printf(a[j][i]);
+    }
+    printf("\n");
+  }
+  
+}
+int main(int argc, char *argv[]) {
+
+
+  //something
+  int plane[23][23]; 
+  int i,j;
+  printArray(plane);
+  /*
+  for (j = 0 ; j < 10000 ; j++) {
+    for(i = 0; i < 10000 ; i++) {
+
+
+    }
+  }
+  */
+  return 0;
+}

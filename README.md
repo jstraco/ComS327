@@ -1,2 +1,4 @@
 # ComS327
-C/C++ 
+Jadyn Gust
+Matt Karmelich
+Nick Soultz
