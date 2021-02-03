@@ -16,8 +16,9 @@ void printArray(int arr[][MAX]){
   printf("\n");
 }
 
-void topple(int arr[][MAX], int x, int y){
+void topple(int arr[][MAX], int y, int x){
   int i,j;
+  arr[y][x] = 0;
   for (j=y-1 ;j < y+2 ; j++){
     for(i=x-1 ;i < x+2 ; i++){
       if(j == y && i == x){
@@ -25,17 +26,11 @@ void topple(int arr[][MAX], int x, int y){
       } else if(i >= 0 && i < MAX && j >=0 && j < MAX && arr[j][i] != -1){
 	arr[j][i]++;
 	if(arr[j][i] > 8){
-	  printf("%d %d infinate recursion\n", j, i);
-	  if(i == 0 || j == 0){
-	    break;
-	  }
+	  //printf("%d %d %d infinate recursion\n", j, i, arr[j][i]);
 	  topple(arr, j, i); 
 	}
       }
     }
-    if(i == 0 || j == 0){
-	    break;
-	  }
   } 
 }
 
@@ -54,7 +49,7 @@ int main(/*int argc, char *argv[]*/) {
 
   //code for testing, delete soon
   plane[11][11]=8;
-  plane[11][12]=-1;
+  //plane[11][12]=-1;
   printArray(plane);
   topple(plane, 11, 11);
   printArray(plane);
