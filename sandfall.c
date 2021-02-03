@@ -20,8 +20,10 @@ void topple(int arr[][MAX], int x, int y){
   int i,j;
   for (j=y-1 ;j < y+2 ; j++){
     for(i=x-1 ;i < x+2 ; i++){
-
-      if(i >= 0 && i <= MAX && j >=0 && j <= MAX){
+      if(j == y && i == x){
+	arr[j][i] = 0;
+      }
+      else if(i >= 0 && i < MAX && j >=0 && j < MAX){
 	arr[j][i]++;
 	if(arr[j][i] > 8){
 	  topple(arr, j, i); 
@@ -49,13 +51,7 @@ int main(/*int argc, char *argv[]*/) {
   printArray(plane);
   topple(plane, 11, 11);
   printArray(plane);
-  /*
-  for (j = 0 ; j < 10000 ; j++) {
-    for(i = 0; i < 10000 ; i++) {
 
-
-    }
-  }
-  */
+  
   return 0;
 }
