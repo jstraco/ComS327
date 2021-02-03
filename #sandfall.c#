@@ -26,16 +26,10 @@ void topple(int arr[][MAX], int x, int y){
 	arr[j][i]++;
 	if(arr[j][i] > 8){
 	  printf("%d %d infinate recursion\n", j, i);
-	  if(i == 0 || j == 0){
-	    break;
-	  }
 	  topple(arr, j, i); 
 	}
       }
     }
-    if(i == 0 || j == 0){
-	    break;
-	  }
   } 
 }
 
