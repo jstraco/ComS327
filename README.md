@@ -1,4 +1,4 @@
 # ComS327
 Jadyn Gust
 Matt Karmelich
-Nick Soultz
+Nick Soultz Ndsoultz@iastate.edu
