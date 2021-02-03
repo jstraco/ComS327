@@ -1,4 +1,4 @@
 # ComS327
-Jadyn Gust
-Matt Karmelich
+Jadyn Gust Jagust@iastate.edu
+Matt Karmelich MatKarm@iastate.edu
 Nick Soultz Ndsoultz@iastate.edu
