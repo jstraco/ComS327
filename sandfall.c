@@ -26,33 +26,29 @@ void topple(int arr[][MAX], int y, int x){
       } else if(i >= 0 && i < MAX && j >=0 && j < MAX && arr[j][i] != -1){
 	arr[j][i]++;
 	if(arr[j][i] > 8){
-	  //printf("%d %d %d infinate recursion\n", j, i, arr[j][i]);
 	  topple(arr, j, i); 
 	}
       }
     }
   } 
 }
-
+/* TO DO
+   impliment sleep time. I think we need to get user input for what they want the refresh rate to be; so you might need to pass another variable into the "topple" method for the refresh rate
+ */
 int main(/*int argc, char *argv[]*/) {
-
-
+  
   //definitions
   int plane[MAX][MAX];
   int i,j;
-  //populating array with 0, delete this later
+  //populating array with 0, TODO: take user input from the command line
+  //and populate the desired positions of the plane with the desired
+  //values that the user has input, "./sandpile 11 11 8" would make the center
+  //value at 11 11 be equal to 8.
   for(j=0;j<MAX;j++){
     for(i=0;i<MAX;i++){
       plane[j][i] = 0;
     }
   }
-
-  //code for testing, delete soon
-  plane[11][11]=8;
-  //plane[11][12]=-1;
-  printArray(plane);
-  topple(plane, 11, 11);
-  printArray(plane);
   //main loop
   while(1){
     plane[11][11]++;
@@ -61,6 +57,5 @@ int main(/*int argc, char *argv[]*/) {
     }
     printArray(plane);
   }
-  
   return 0;
 }
