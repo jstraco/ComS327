@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #define MAX 23
 
 void printArray(int arr[][MAX]){
@@ -21,9 +23,7 @@ void topple(int arr[][MAX], int y, int x){
   arr[y][x] = 0;
   for (j=y-1 ;j < y+2 ; j++){
     for(i=x-1 ;i < x+2 ; i++){
-      if(j == y && i == x){
-	arr[j][i] = 0;
-      } else if(i >= 0 && i < MAX && j >=0 && j < MAX && arr[j][i] != -1){
+      if(i >= 0 && i < MAX && j >=0 && j < MAX && arr[j][i] != -1){
 	arr[j][i]++;
 	if(arr[j][i] > 8){
 	  topple(arr, j, i); 
@@ -35,11 +35,11 @@ void topple(int arr[][MAX], int y, int x){
 /* TO DO
    impliment sleep time. I think we need to get user input for what they want the refresh rate to be; so you might need to pass another variable into the "topple" method for the refresh rate
  */
-int main(/*int argc, char *argv[]*/) {
-  
+int main(int argc, char *argv[]) {
+
+  int j, i;
   //definitions
   int plane[MAX][MAX];
-  int i,j;
   //populating array with 0, TODO: take user input from the command line
   //and populate the desired positions of the plane with the desired
   //values that the user has input, "./sandpile 11 11 8" would make the center
@@ -48,6 +48,11 @@ int main(/*int argc, char *argv[]*/) {
     for(i=0;i<MAX;i++){
       plane[j][i] = 0;
     }
+  }
+  int argIndex = 1; 
+  for(i=argc/3;i>0;i--) {
+    plane[atoi(argv[argIndex + 1])][atoi(argv[argIndex])]  = atoi(argv[argIndex + 2]);
+    argIndex += 3;
   }
   //main loop
   while(1){
