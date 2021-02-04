@@ -1,5 +1,4 @@
 sandfall: sandfall.c
-	gcc -Wall -Werror -ggdb3 -o sandfall
-	
+	gcc sandfall.c -Wall -Werror -ggdb3 -o sandfall
 clean:
 	rm -f sandfall

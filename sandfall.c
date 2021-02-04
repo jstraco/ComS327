@@ -32,6 +32,11 @@ void topple(int arr[][MAX], int y, int x){
     }
   } 
 }
+
+
+int highest(int first, int second);
+int lowest(int first, int second);
+
 /* TO DO
    impliment sleep time. I think we need to get user input for what they want the refresh rate to be; so you might need to pass another variable into the "topple" method for the refresh rate
  */
@@ -56,7 +61,9 @@ int main(int argc, char *argv[]) {
   }
   //main loop
   while(1){
-    plane[11][11]++;
+    if(plane[11][11] != -1){	
+      plane[11][11]++;
+    }
     if(plane[11][11] > 8) {
       topple(plane, 11, 11);
     }
@@ -64,3 +71,4 @@ int main(int argc, char *argv[]) {
   }
   return 0;
 }
+
