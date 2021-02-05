@@ -46,7 +46,9 @@ int main(int argc, char *argv[]) {
     }
   }
   //taking user input from command line
-  if (!strcmp("--fps", argv[1])){
+
+ 
+  if (argc > 1  && !strcmp("--fps", argv[1])){
     fps = atoi(argv[2]);
     argIndex = 3;
     argc = argc - 2;
@@ -66,7 +68,6 @@ int main(int argc, char *argv[]) {
       topple(plane, 11, 11);
     }
     printArray(plane);
-    printf("FPS = %d\n", fps);
     usleep(100000/fps);
   }
   return 0;
