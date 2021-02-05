@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
     fps = 60;
   }
   for(i=argc/3;i>0;i--) {
-    plane[atoi(argv[argIndex + 1])-1][atoi(argv[argIndex])-1]  = atoi(argv[argIndex + 2]);
+    plane[atoi(argv[argIndex])][atoi(argv[argIndex+1])]  = atoi(argv[argIndex + 2]);
     argIndex += 3;
   }
   //main loop
