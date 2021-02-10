@@ -22,28 +22,35 @@ void generateRooms(struct room rooms[6]){
 
 //This should simply print the dungeon
 void printDungeon(char dungeon[][X]){
-   for(int j = 0; j < X ;j++){
-     for(int i = 0; i < Y;i++){
-       printf("%d", dungeon[j][i]);
+   for(int j = 0; j < Y ;j++){
+     for(int i = 0; i < X;i++){
+       printf("%c", dungeon[j][i]);
      }
      printf("\n");
    }
 }
 //I'm not sure if I did the pointers right
 int main(int argc, char *argv[]) {
-   struct room rooms[6];
-   // char dungeon[Y][X];
-   generateRooms(rooms);
-   printf("%d",rooms[0].xPos);
-   // dungeon[1][1] =* "g";
+  //struct room rooms[6];
+
+   char dungeon[Y][X];
+
+   //generateRooms(rooms);
+
+   //printf("%d",rooms[0].xPos);
+   //dungeon[1][1] =* "g";
   //does this need pointers?
-   /* for(int j = 0; j < X ;j++){
-    dungeon[0][j] = '-';
-    for(int i = 1; i < Y-1;i++){
-       dungeon[i][j] = ' ';
-    }
-     dungeon[Y-1][j] = '-';
-     }*/
-  printf("made it here\n");
+   for(int j = 0; j < Y ;j++){
+     dungeon[j][0] = '|';
+     dungeon[j][X-1] = '|';
+     for(int i = 1; i < X-1;i++){
+       dungeon[j][i] = ' ';
+     }
+   }
+   for(int i = 0; i < X; i++){
+     dungeon[0][i] = '-';
+     dungeon[Y-1][i] = '-';
+   }
+  printDungeon(dungeon);
   return 0;
 }
