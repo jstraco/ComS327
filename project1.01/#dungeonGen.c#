@@ -12,10 +12,8 @@ struct room
   int ySize;
 };
 
-void generateRooms(struct room rooms[6]){
-  //https://www.geeksforgeeks.org/generating-random-number-range-c/ (random num gen)
-  // todo generate rooms of random size to fit room size requirements 
-  for(int i = 0; i < 6 ; i++){
+void generateRooms(struct room* rooms[]){
+  for(int i = 0; i < sizeof(rooms) ; i++){
     printf("%d",i);
   }
 }
@@ -33,7 +31,7 @@ void printDungeon(char dungeon[][X]){
 int main(int argc, char *argv[]) {
    struct room rooms[6];
    // char dungeon[Y][X];
-   generateRooms(rooms);
+   generateRooms( room* rooms);
    printf("%d",rooms[0].xPos);
    // dungeon[1][1] =* "g";
   //does this need pointers?
