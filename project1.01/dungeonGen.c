@@ -24,7 +24,6 @@ struct room
 struct room rooms[6];
 
 void addRooms(struct room rooms[6]){
-  printf("room %d y value %d, x value %d \n",0,rooms[0].yPos,rooms[0].xPos);
   for(int room = 0; room < 6; room++){
     for(int j = rooms[room].yPos; j <= rooms[room].yEndPoint; j++){
       for(int i = rooms[room].xPos; i <= rooms[room].xEndPoint; i++){
@@ -43,20 +42,17 @@ void generateRooms(){
   rooms[0].yPos = (rand() % 16) +1;
 
   do {
-    rooms[0].xSize = (rand() % 7) +4;
-    rooms[0].ySize = (rand() % 8) +3;
+    rooms[0].xSize = (rand() % 7) +4;  //7
+    rooms[0].ySize = (rand() % 8) +3;  //8
     rooms[0].xEndPoint = rooms[0].xPos + rooms[0].xSize;
     rooms[0].yEndPoint = rooms[0].yPos + rooms[0].ySize;
   } while (rooms[0].xEndPoint >= X && rooms[0].yEndPoint >= Y);
-  
-  //set midpoint
   
   for(int i = 1; i < 6 ; i++){
 
     do {
     rooms[i].xPos = (rand() % 74) +1;
     rooms[i].yPos = (rand() % 16) +1;
-    printf("Make It Here2!\n");
     } while (checkPoint(i));
 
     do {
@@ -64,7 +60,6 @@ void generateRooms(){
     rooms[i].ySize = (rand() % (10 - 3 + 1)) +3;
     rooms[i].xEndPoint = rooms[i].xPos + rooms[i].xSize;
     rooms[i].yEndPoint = rooms[i].yPos + rooms[i].ySize;
-    printf("Make It Here3!\n");
     } while (checkSize(i));
   }
 }
@@ -73,7 +68,6 @@ int checkPoint(int i){
     for(int j = 0; j < i; j++) {
       if(rooms[i].xPos > rooms[j].xPos - 6 && rooms[i].xPos < rooms[j].xEndPoint + 2 &&
 	  rooms[i].yPos > rooms[j].yPos - 5 && rooms[i].yPos < rooms[j].yEndPoint + 2){
-	printf("Make It Here66666666!       %d\n", i);
 	return 1;
       }
     }
@@ -90,11 +84,6 @@ int checkSize(int i)
     }
       return 0;
   }
-
-	 /*((rooms[i].xEndPoint > rooms[j].xPos - 2 && rooms[i].xPos < rooms[j].xPos) &&
-	  (rooms[i].yEndPoint > rooms[j].yPos - 2 && rooms[i].yPos < rooms[j].yPos)) ||
-	  (rooms[i].xEndPoint < rooms[j].xEndPoint + 1 && rooms[i].yEndPoint < )*/
-
 //This will  simply print the dungeon
 void printDungeon(char dungeon[][X]){
   for(int i = 0; i < 82; i++){
