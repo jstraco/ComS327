@@ -34,7 +34,6 @@ void addRooms(struct room rooms[numberOfRooms]){
 	dungeon[j][i] = '.';
       }
     }
-    printf("test room %d (%d,%d) to (%d,%d)\n",room,rooms[room].yPos,rooms[room].xPos,rooms[room].yEndPoint,rooms[room].xEndPoint);
   }
 }
 
