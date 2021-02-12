@@ -41,15 +41,14 @@ void generateRooms(){
   
   srand(time(0));
 
-  rooms[0].xPos = (rand() % 74) +1;
-  rooms[0].yPos = (rand() % 16) +1;
-
   do {
+    rooms[0].xPos = (rand() % 74) +1;
+    rooms[0].yPos = (rand() % 16) +1;
     rooms[0].xSize = (rand() % 7) +4;  //7
     rooms[0].ySize = (rand() % 8) +3;  //8
     rooms[0].xEndPoint = rooms[0].xPos + rooms[0].xSize;
     rooms[0].yEndPoint = rooms[0].yPos + rooms[0].ySize;
-  } while (rooms[0].xEndPoint >= X && rooms[0].yEndPoint >= Y);
+  } while (rooms[0].xEndPoint >= X || rooms[0].yEndPoint >= Y);
   
   for(int i = 1; i < numberOfRooms ; i++){
 
