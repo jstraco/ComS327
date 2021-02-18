@@ -84,7 +84,10 @@ typedef struct dungeon {
    * that structure.  Pathfinding will require efficient use of the map,  *
    * and pulling in unnecessary data with each map cell would add a lot   *
    * of overhead to the memory system.                                    */
+  pair_t pc;
   uint8_t hardness[DUNGEON_Y][DUNGEON_X];
+  uint8_t num_stairs_up;
+  uint8_t num_stairs_down;
 } dungeon_t;
 
 static uint32_t in_room(dungeon_t *d, int16_t y, int16_t x)
@@ -622,6 +625,8 @@ static int place_rooms(dungeon_t *d)
 static void place_stairs(dungeon_t *d)
 {
   pair_t p;
+  d->num_stairs_down = 0;
+  d->num_stairs_up = 0;
   do {
     while ((p[dim_y] = rand_range(1, DUNGEON_Y - 2)) &&
            (p[dim_x] = rand_range(1, DUNGEON_X - 2)) &&
@@ -629,6 +634,7 @@ static void place_stairs(dungeon_t *d)
             (mappair(p) > ter_stairs)))
       ;
     mappair(p) = ter_stairs_down;
+    d->num_stairs_down++;
   } while (rand_under(1, 3));
   do {
     while ((p[dim_y] = rand_range(1, DUNGEON_Y - 2)) &&
@@ -638,6 +644,7 @@ static void place_stairs(dungeon_t *d)
       
       ;
     mappair(p) = ter_stairs_up;
+    d->num_stairs_up++;
   } while (rand_under(2, 4));
 }
 
@@ -723,27 +730,105 @@ void init_dungeon(dungeon_t *d)
   empty_dungeon(d);
 }
 
+//TODO: confirm file is there
+void load_dungeon(dungeon_t *d, char *path) {
+  FILE *f = NULL;
+  f = fopen(path, "r");
+
+  if(f) {
+    //not sure what to do with these, we could just print it
+    char fileType[12];
+    fread(fileType, 12, 1, f);
+    int version;
+    fread(&version, 4, 1, f);
+    int size;
+    fread(&size, 4, 1, f);
+    printf("File Type: %s\nVersion: %d\nSize: %d\n", fileType, be32toh(version), be32toh(size));
+  
+    fread(&d->pc[dim_x], 1, 1, f);
+    fread(&d->pc[dim_y], 1, 1, f);
+
+    fclose(f);
+
+    printf("Loaded\n");
+  }
+  else
+    printf("No file found\n");
+
+  exit(0);
+
+  
+}
+
+void save_dungeon(dungeon_t *d, char *path) {
+  FILE *f = NULL;
+  f = fopen(path, "w");
+
+  char fileType[12] =  "RLG327-S2021";
+  fwrite(fileType, 12, 1, f);
+
+  uint32_t version = htobe32(0);
+  fwrite(&version, 4, 1, f);
+
+  uint32_t size = htobe32(1708 + d->num_rooms * 4 + d->num_stairs_up  + d->num_stairs_down * 2);
+  fwrite(&size, 4, 1, f);
+
+  fwrite(&d->pc[dim_x], 1, 1, f);
+  fwrite(&d->pc[dim_y], 1, 1, f);
+
+  
+
+  fclose(f);
+  printf("Saved\n");
+}
+
 int main(int argc, char *argv[])
 {
   dungeon_t d;
   struct timeval tv;
   uint32_t seed;
 
+  char * path = (char*)malloc((strlen(getenv("HOME")) + strlen("/.rlg327/dungeon")) * sizeof(char));
+  strcat(path, getenv("HOME"));
+  strcat(path, "/.rlg327/dungeon");
+
   UNUSED(in_room);
 
-  if (argc == 2) {
-    seed = atoi(argv[1]);
+  int load = 0;
+  int save = 0;
+  int seedIndex = -1;
+  
+  for(int i = 1; i < argc; i++) {
+    if(strcmp(argv[i], "--load") == 0)
+      load = 1;
+    else if(strcmp(argv[i], "--save") == 0)
+      save = 1;
+    else
+      seedIndex = i;
+  }
+  if (seedIndex != -1) {
+    seed = atoi(argv[seedIndex]);
+    
   } else {
     gettimeofday(&tv, NULL);
     seed = (tv.tv_usec ^ (tv.tv_sec << 20)) & 0xffffffff;
   }
+  if(load) {
+    load_dungeon(&d, path);
+  }
+  else {  
+    printf("Using seed: %u\n", seed);
+    srand(seed);
 
-  printf("Using seed: %u\n", seed);
-  srand(seed);
+    init_dungeon(&d);
+    gen_dungeon(&d);
+  }
 
-  init_dungeon(&d);
-  gen_dungeon(&d);
   render_dungeon(&d);
+
+  if(save)
+    save_dungeon(&d, path);
+  
   delete_dungeon(&d);
 
   return 0;
