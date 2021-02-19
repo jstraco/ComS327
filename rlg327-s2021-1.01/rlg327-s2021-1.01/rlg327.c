@@ -756,8 +756,9 @@ void load_dungeon(dungeon_t *d, char *path) {
     
     //not sure what to do with these, we could just print it
 
+    uint8_t x;
     uint16_t y;
-    uint8_t z;
+    uint16_t z; // maybe 8 bit?
     char fileType[12];
     fread(fileType, 12, 1, f);
     int version;
@@ -767,59 +768,65 @@ void load_dungeon(dungeon_t *d, char *path) {
     printf("File Type: %s\nVersion: %d\nSize: %d\n", fileType, be32toh(version), be32toh(size));
 
     fread(&d->pc[dim_x], 1, 1, f);
-    d->pc[dim_x] = be16toh(d->pc[dim_x]);
+    //d->pc[dim_x] = be16toh(d->pc[dim_x]);
       
     fread(&d->pc[dim_y], 1, 1, f);
-    d->pc[dim_y] = be16toh(d->pc[dim_y]);
+    //d->pc[dim_y] = be16toh(d->pc[dim_y]);
 
-    fread(&d->hardness, 1, 1680, f);
-    //this might need work ^^^
-
-    
+    for (int j = 0; j < DUNGEON_Y; j++) {
+	for (int i = 0; i < DUNGEON_X; i++) {
+	  fread(&d->hardness[j][i], 1, 1, f);
+	  if(d->hardness[j][i] == 0){
+	    d->map[j][i] = ter_floor_hall;
+	  } else if (d->hardness[j][i] == 255){
+	    d->map[j][i] = ter_wall_immutable;
+	  }else {
+	    d->map[j][i] = ter_wall;
+	  }
+	}
+      }
     
     fread(&y, 2, 1, f);
     d->num_rooms = be16toh(y);
-    
-  //writes location of rooms
-    // pair_t r;
   for (int i = 0; i < d->num_rooms; i++ ){
     fread(&z, 1, 1, f);
-    d->rooms[i].position[dim_x] = be16toh(z);
+    d->rooms[i].position[dim_x] = z;//be16toh(z);
     fread(&z, 1, 1, f);
-    d->rooms[i].position[dim_y] = be16toh(z);
+    d->rooms[i].position[dim_y] = z;//be16toh(z);
     fread(&z, 1, 1, f);
-    d->rooms[i].size[dim_x] = be16toh(z);
+    d->rooms[i].size[dim_x] = z;//be16toh(z);
     fread(&z, 1, 1, f);
-    d->rooms[i].size[dim_y] = be16toh(z);
-    // r[dim_x] = d->rooms[i].position[dim_x];
-    //mappair(r) = ter_floor;
+    d->rooms[i].size[dim_y] = z;//be16toh(z);
   }
-  
+
   fread(&y, 2, 1, f);
   d->num_stairs_up = be16toh(y);
-  for(int i = 0; i < d->num_stairs_up; i++){
+	 // These stairs populating might be broke - Jadyn at 12am
+  for(int i = 0; i < d->num_stairs_up; i++){ 
+    fread(&x, 2, d->num_stairs_up, f);
+    d->stairsUp[i][dim_x] = x;//be16toh(x);
+    
     fread(&z,2, d->num_stairs_up, f);
-    d->stairsUp[i][dim_x] = be16toh(z);
-    fread(&z,2, d->num_stairs_up, f);
-    d->stairsUp[i][dim_y] = be16toh(z);
+    d->stairsUp[i][dim_y] = x;//be16toh(z);
   }  
   fread(&y, 2,1, f);
   d->num_stairs_down = be16toh(y);
+	 
   for(int i = 0; i < d->num_stairs_down; i++){
     fread(&z,2, d->num_stairs_down, f);
-    d->stairsDown[i][dim_x] = be16toh(z);
+    d->stairsDown[i][dim_x] = x;//be16toh(z);
+    
     fread(&z,2, d->num_stairs_down, f);
-    d->stairsDown[i][dim_y] = be16toh(z);
+    d->stairsDown[i][dim_y] = x;//be16toh(z);
   }
-
   fclose(f);
   //place_rooms(d);
     printf("Loaded\n");
 
     
     render_dungeon(d);
-  }
-  else {
+	  
+	 }else {
     printf("File not found\n");
     exit(0);
   }
@@ -845,9 +852,15 @@ void save_dungeon(dungeon_t *d, char *path) {
   uint16_t py = htobe16(d->pc[dim_y]);
   fwrite(&py, 1, 1, f);
 
-  fwrite(&d->hardness, 1, 1680, f);
+  for (int j = 0 ; j < DUNGEON_Y ; j++) {
+    for (int i = 0 ; i < DUNGEON_X ; i++) {
+	fwrite(&d->hardness[j][i], 1, 1, f);
+      }
+  }
+	   
 
   printf("%d\n", d->num_rooms);
+    
   uint16_t roomCount = htobe16(d->num_rooms);
   fwrite(&roomCount, 2, 1, f);
 
