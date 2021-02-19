@@ -49,6 +49,7 @@ typedef int16_t pair_t[num_dims];
 #define ROOM_MIN_Y             3
 #define ROOM_MAX_X             20
 #define ROOM_MAX_Y             15
+#define MAX_STAIRS             10
 
 #define mappair(pair) (d->map[pair[dim_y]][pair[dim_x]])
 #define mapxy(x, y) (d->map[y][x])
@@ -76,6 +77,8 @@ typedef struct dungeon {
   uint32_t num_rooms;
   room_t rooms[MAX_ROOMS];
   terrain_type_t map[DUNGEON_Y][DUNGEON_X];
+  pair_t stairsUp[MAX_STAIRS];
+  pair_t stairsDown[MAX_STAIRS];
   /* Since hardness is usually not used, it would be expensive to pull it *
    * into cache every time we need a map cell, so we store it in a        *
    * parallel array, rather than using a structure to represent the       *
@@ -634,6 +637,8 @@ static void place_stairs(dungeon_t *d)
             (mappair(p) > ter_stairs)))
       ;
     mappair(p) = ter_stairs_down;
+    stairsDown[d->num_stairs_down][dim_y] = p[dim_y];
+    stairsDown[d->num_stairs_down][dim_x] = p[dim_x];
     d->num_stairs_down++;
   } while (rand_under(1, 3));
   do {
@@ -641,9 +646,11 @@ static void place_stairs(dungeon_t *d)
            (p[dim_x] = rand_range(1, DUNGEON_X - 2)) &&
            ((mappair(p) < ter_floor)                 ||
             (mappair(p) > ter_stairs)))
-      
+      //where you left off
       ;
     mappair(p) = ter_stairs_up;
+    stairsUp[d->num_stairs_up][dim_y] = p[dim_y];
+    stairsUp[d->num_stairs_up][dim_x] = p[dim_x];
     d->num_stairs_up++;
   } while (rand_under(2, 4));
 }
@@ -737,6 +744,7 @@ void load_dungeon(dungeon_t *d, char *path) {
 
   if(f) {
     //not sure what to do with these, we could just print it
+    
     char fileType[12];
     fread(fileType, 12, 1, f);
     int version;
@@ -748,14 +756,44 @@ void load_dungeon(dungeon_t *d, char *path) {
     fread(&d->pc[dim_x], 1, 1, f);
     fread(&d->pc[dim_y], 1, 1, f);
 
+
+    fread(&d->hardness, 1, 1680, f);
+
+    fread(&d->num_rooms, 2, 1, f);
+
+  //writes location of rooms
+  for (int i; = 0 i < d->num_rooms;i++ ){
+    fread(d->rooms[i].position[dim_x], 1, 1, f);
+    fread(d->rooms[i].position[dim_y], 1, 1, f);
+    fread(d->rooms[i].size[dim_x], 1, 1, f);
+    fread(d->rooms[i].size[dim_y], 1, 1, f);
+  }
+  
+  fread(d->num_stairs_up, 2, 1, f);
+  for(int i = 0; i < d->num_stairs_up; i++){
+    fread(d->stairs_up[i][dim_x], 2, d->num_stairs_up, f); //Double check stairs reference
+    fread(d->stairs_up[i][dim_y], 2, d->num_stairs_up, f); //Double check stairs reference
+  }
+  fread(d->num_stairs_down, 2, 1, f);
+  for(int i = 0; i < d->num_stairs_down; i++){
+    fread(d->stairs_down[i][dim_x], 2, d->num_stairs_down, f); //Double check stairs reference
+    fread(d->stairs_down[i][dim_y], 2, d->num_stairs_down, f); //Double check stairs reference
+  }
+
+
+
+
+
+
+    
     fclose(f);
 
     printf("Loaded\n");
   }
-  else
-    printf("No file found\n");
-
-  exit(0);
+  /*else{
+    init_dungeon(d);
+    gen_dungeon(d);
+    }*/
 
   
 }
@@ -776,8 +814,29 @@ void save_dungeon(dungeon_t *d, char *path) {
   fwrite(&d->pc[dim_x], 1, 1, f);
   fwrite(&d->pc[dim_y], 1, 1, f);
 
-  
+  fwrite(&d->hardness, 1, 1680, f);
 
+  fwrite(&d->num_rooms, 2, 1, f);
+
+  //writes location of rooms
+  for (int i; = 0 i < d->num_rooms;i++ ){
+    fwrite(&d->rooms[i].position[dim_x], 1, 1, f);
+    fwrite(&d->rooms[i].position[dim_y], 1, 1, f);
+    fwrite(&d->rooms[i].size[dim_x], 1, 1, f);
+    fwrite(&d->rooms[i].size[dim_y], 1, 1, f);
+  }
+  
+  fwrite(d->num_stairs_up, 2, 1, f);
+  for(int i = 0; i < d->num_stairs_up; i++){
+    fwrite(&d->stairs_up[i][dim_x], 2, d->num_stairs_up, f); //Double check stairs reference
+    fwrite(&d->stairs_up[i][dim_y], 2, d->num_stairs_up, f); //Double check stairs reference
+  }
+  fwrite(&d->num_stairs_down, 2, 1, f);
+  for(int i = 0; i < d->num_stairs_down; i++){
+    fwrite(&d->stairs_down[i][dim_x], 2, d->num_stairs_down, f); //Double check stairs reference
+    fwrite(&d->stairs_down[i][dim_y], 2, d->num_stairs_down, f); //Double check stairs reference
+  }
+  
   fclose(f);
   printf("Saved\n");
 }
