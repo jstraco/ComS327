@@ -125,5 +125,5 @@ void render_dungeon(701,21594
 void delete_dungeon(740,22405
 void init_dungeon(744,22444
 void load_dungeon(750,22531
-void save_dungeon(837,24668
-int main(902,26639
+void save_dungeon(837,24670
+int main(902,26641

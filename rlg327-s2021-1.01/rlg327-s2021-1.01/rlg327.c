@@ -824,7 +824,7 @@ void load_dungeon(dungeon_t *d, char *path) {
     printf("Loaded\n");
 
     
-    render_dungeon(d);
+    //render_dungeon(d);
 	  
 	 }else {
     printf("File not found\n");
