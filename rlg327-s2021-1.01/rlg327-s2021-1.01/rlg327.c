@@ -747,15 +747,14 @@ void init_dungeon(dungeon_t *d)
 }
 
 //TODO: confirm file is there
-void load_dungeon(dungeon_t *d, char *path) {
+int load_dungeon(dungeon_t *d, char *path) {
   FILE *f = NULL;
   f = fopen(path, "r");
 
+  int output = 0;
+
   if(f) {
-
-    
-    //not sure what to do with these, we could just print it
-
+    output = 1;
     uint8_t x;
     uint16_t y;
     uint16_t z; // maybe 8 bit?
@@ -819,19 +818,17 @@ void load_dungeon(dungeon_t *d, char *path) {
     fread(&z,2, d->num_stairs_down, f);
     d->stairsDown[i][dim_y] = x;//be16toh(z);
   }
-  fclose(f);
   //place_rooms(d);
     printf("Loaded\n");
 
     
-    //render_dungeon(d);
-	  
-	 }else {
-    printf("File not found\n");
-    exit(0);
-  }
+    } else {
+    	printf("File not found\n");
+    	
+    }
+    fclose(f);
 
-  
+    return(output);
 }
 
 void save_dungeon(dungeon_t *d, char *path) {
@@ -857,9 +854,6 @@ void save_dungeon(dungeon_t *d, char *path) {
 	fwrite(&d->hardness[j][i], 1, 1, f);
       }
   }
-	   
-
-  printf("%d\n", d->num_rooms);
     
   uint16_t roomCount = htobe16(d->num_rooms);
   fwrite(&roomCount, 2, 1, f);
@@ -930,8 +924,7 @@ int main(int argc, char *argv[])
     gettimeofday(&tv, NULL);
     seed = (tv.tv_usec ^ (tv.tv_sec << 20)) & 0xffffffff;
   }
-  if(load) {
-    load_dungeon(&d, path);
+  if(load && load_dungeon(&d, path)) {
   }
   else {  
     printf("Using seed: %u\n", seed);
