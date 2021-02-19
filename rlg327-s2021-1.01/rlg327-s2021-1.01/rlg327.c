@@ -787,6 +787,7 @@ int load_dungeon(dungeon_t *d, char *path) {
     
     fread(&y, 2, 1, f);
     d->num_rooms = be16toh(y);
+    
   for (int i = 0; i < d->num_rooms; i++ ){
     fread(&z, 1, 1, f);
     d->rooms[i].position[dim_x] = z;//be16toh(z);
@@ -796,11 +797,17 @@ int load_dungeon(dungeon_t *d, char *path) {
     d->rooms[i].size[dim_x] = z;//be16toh(z);
     fread(&z, 1, 1, f);
     d->rooms[i].size[dim_y] = z;//be16toh(z);
+    printf("%d",z);
+
+    for(int j = d->rooms[i].position[dim_y]; j < d->rooms[i].position[dim_y] + d->rooms[i].size[dim_y]; j++){
+      for (int k = d->rooms[i].position[dim_x]; k < d->rooms[i].position[dim_x] + d->rooms[i].size[dim_x]; k++){
+	d->map[j][k] = ter_floor_room;
+      }
+    }
   }
 
   fread(&y, 2, 1, f);
   d->num_stairs_up = be16toh(y);
-	 // These stairs populating might be broke - Jadyn at 12am
   for(int i = 0; i < d->num_stairs_up; i++){ 
     fread(&x, 2, d->num_stairs_up, f);
     d->stairsUp[i][dim_x] = x;//be16toh(x);
@@ -868,6 +875,8 @@ void save_dungeon(dungeon_t *d, char *path) {
     fwrite(&xDim, 1, 1, f);
     uint16_t yDim = htobe16(d->rooms[i].size[dim_y]);
     fwrite(&yDim, 1, 1, f);
+
+    
   }
 
   uint16_t stairUpCount = htobe16(d->num_stairs_up);
