@@ -1271,7 +1271,7 @@ int pathThroughDungeon(dungeon_t *d){
 
   if (!initialized) {
     initialized = 1;
-    dungeon = d;
+    //dungeon = d;
     for (y = 0; y < DUNGEON_Y; y++) {
       for (x = 0; x < DUNGEON_X; x++) {
         p[y][x].pos[dim_y] = y;
@@ -1282,10 +1282,10 @@ int pathThroughDungeon(dungeon_t *d){
 
   for (y = 0; y < DUNGEON_Y; y++) {
     for (x = 0; x < DUNGEON_X; x++) {
-      d->pc_distance[y][x] = 255;
+      d->distance[y][x] = 255;
     }
   }
-  d->pc_distance[d->pc.position[dim_y]][d->pc.position[dim_x]] = 0;
+  d->distance[d->position[dim_y]][d->position[dim_x]] = 0;
 
   heap_init(&h, dist_cmp, NULL);
 
