@@ -1239,6 +1239,21 @@ int pathThroughWalls(){
   return 0;
 }
 
+/*
+static int32_t dist_cmp(const void *key, const void *with) {
+  return ((int32_t) dungeon->pc_distance[((path_t *) key)->pos[dim_y]]
+                                        [((path_t *) key)->pos[dim_x]] -
+          (int32_t) dungeon->pc_distance[((path_t *) with)->pos[dim_y]]
+                                        [((path_t *) with)->pos[dim_x]]);
+}
+
+static int32_t tunnel_cmp(const void *key, const void *with) {
+  return ((int32_t) dungeon->pc_tunnel[((path_t *) key)->pos[dim_y]]
+                                      [((path_t *) key)->pos[dim_x]] -
+          (int32_t) dungeon->pc_tunnel[((path_t *) with)->pos[dim_y]]
+                                      [((path_t *) with)->pos[dim_x]]);
+}
+*/
 //This one will find the best path through all spaces where hardness == 0
 //This one matt and I can handle probs
 int pathThroughDungeon(dungeon_t *d){
@@ -1279,66 +1294,66 @@ int pathThroughDungeon(dungeon_t *d){
   while ((c = heap_remove_min(&h))) {
     c->hn = NULL;
     if ((p[c->pos[dim_y] - 1][c->pos[dim_x] - 1].hn) &&
-        (d->pc_distance[c->pos[dim_y] - 1][c->pos[dim_x] - 1] >
-         d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
-      d->pc_distance[c->pos[dim_y] - 1][c->pos[dim_x] - 1] =
-        d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
+        (d->distance[c->pos[dim_y] - 1][c->pos[dim_x] - 1] >
+         d->distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
+      d->distance[c->pos[dim_y] - 1][c->pos[dim_x] - 1] =
+        d->distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
       heap_decrease_key_no_replace(&h,
                                    p[c->pos[dim_y] - 1][c->pos[dim_x] - 1].hn);
     }
     if ((p[c->pos[dim_y] - 1][c->pos[dim_x]    ].hn) &&
-        (d->pc_distance[c->pos[dim_y] - 1][c->pos[dim_x]    ] >
-         d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
-      d->pc_distance[c->pos[dim_y] - 1][c->pos[dim_x]    ] =
-        d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
+        (d->distance[c->pos[dim_y] - 1][c->pos[dim_x]    ] >
+         d->distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
+      d->distance[c->pos[dim_y] - 1][c->pos[dim_x]    ] =
+        d->distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
       heap_decrease_key_no_replace(&h,
                                    p[c->pos[dim_y] - 1][c->pos[dim_x]    ].hn);
     }
     if ((p[c->pos[dim_y] - 1][c->pos[dim_x] + 1].hn) &&
-        (d->pc_distance[c->pos[dim_y] - 1][c->pos[dim_x] + 1] >
-         d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
-      d->pc_distance[c->pos[dim_y] - 1][c->pos[dim_x] + 1] =
-        d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
+        (d->distance[c->pos[dim_y] - 1][c->pos[dim_x] + 1] >
+         d->distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
+      d->distance[c->pos[dim_y] - 1][c->pos[dim_x] + 1] =
+        d->distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
       heap_decrease_key_no_replace(&h,
                                    p[c->pos[dim_y] - 1][c->pos[dim_x] + 1].hn);
     }
     if ((p[c->pos[dim_y]    ][c->pos[dim_x] - 1].hn) &&
-        (d->pc_distance[c->pos[dim_y]    ][c->pos[dim_x] - 1] >
-         d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
-      d->pc_distance[c->pos[dim_y]    ][c->pos[dim_x] - 1] =
-        d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
+        (d->distance[c->pos[dim_y]    ][c->pos[dim_x] - 1] >
+         d->distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
+      d->distance[c->pos[dim_y]    ][c->pos[dim_x] - 1] =
+        d->distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
       heap_decrease_key_no_replace(&h,
                                    p[c->pos[dim_y]    ][c->pos[dim_x] - 1].hn);
     }
     if ((p[c->pos[dim_y]    ][c->pos[dim_x] + 1].hn) &&
-        (d->pc_distance[c->pos[dim_y]    ][c->pos[dim_x] + 1] >
-         d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
-      d->pc_distance[c->pos[dim_y]    ][c->pos[dim_x] + 1] =
-        d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
+        (d->distance[c->pos[dim_y]    ][c->pos[dim_x] + 1] >
+         d->distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
+      d->distance[c->pos[dim_y]    ][c->pos[dim_x] + 1] =
+        d->distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
       heap_decrease_key_no_replace(&h,
                                    p[c->pos[dim_y]    ][c->pos[dim_x] + 1].hn);
     }
     if ((p[c->pos[dim_y] + 1][c->pos[dim_x] - 1].hn) &&
-        (d->pc_distance[c->pos[dim_y] + 1][c->pos[dim_x] - 1] >
-         d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
-      d->pc_distance[c->pos[dim_y] + 1][c->pos[dim_x] - 1] =
-        d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
+        (d->distance[c->pos[dim_y] + 1][c->pos[dim_x] - 1] >
+         d->distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
+      d->distance[c->pos[dim_y] + 1][c->pos[dim_x] - 1] =
+        d->distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
       heap_decrease_key_no_replace(&h,
                                    p[c->pos[dim_y] + 1][c->pos[dim_x] - 1].hn);
     }
     if ((p[c->pos[dim_y] + 1][c->pos[dim_x]    ].hn) &&
-        (d->pc_distance[c->pos[dim_y] + 1][c->pos[dim_x]    ] >
-         d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
-      d->pc_distance[c->pos[dim_y] + 1][c->pos[dim_x]    ] =
-        d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
+        (d->distance[c->pos[dim_y] + 1][c->pos[dim_x]    ] >
+         d->distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
+      d->distance[c->pos[dim_y] + 1][c->pos[dim_x]    ] =
+        d->distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
       heap_decrease_key_no_replace(&h,
                                    p[c->pos[dim_y] + 1][c->pos[dim_x]    ].hn);
     }
     if ((p[c->pos[dim_y] + 1][c->pos[dim_x] + 1].hn) &&
-        (d->pc_distance[c->pos[dim_y] + 1][c->pos[dim_x] + 1] >
-         d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
-      d->pc_distance[c->pos[dim_y] + 1][c->pos[dim_x] + 1] =
-        d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
+        (d->distance[c->pos[dim_y] + 1][c->pos[dim_x] + 1] >
+         d->distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
+      d->distance[c->pos[dim_y] + 1][c->pos[dim_x] + 1] =
+        d->distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
       heap_decrease_key_no_replace(&h,
                                    p[c->pos[dim_y] + 1][c->pos[dim_x] + 1].hn);
     }
