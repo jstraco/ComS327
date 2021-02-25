@@ -1233,6 +1233,12 @@ void usage(char *name)
 
   exit(-1);
 }
+
+typedef struct path {
+  heap_node_t *hn;
+  uint8_t pos[2];
+} path_t;
+
 //this method will find the best path to a target where hardness < 255
 //this is the easier one, Nick can do this
 int pathThroughWalls(){
