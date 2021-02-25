@@ -1558,7 +1558,8 @@ int main(int argc, char *argv[])
   }
 
   render_dungeon(&d);
-
+  pathThroughDungeon(&d);
+  printPaths(&d);
   if (do_save) {
     if (do_save_seed) {
        /* 10 bytes for number, plus dot, extention and null terminator. */
