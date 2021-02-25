@@ -1245,14 +1245,14 @@ int pathThroughWalls(){
   return 0;
 }
 
-/*
+static dungeon_t *dungeon;
 static int32_t dist_cmp(const void *key, const void *with) {
-  return ((int32_t) dungeon->pc_distance[((path_t *) key)->pos[dim_y]]
+  return ((int32_t) dungeon->distance[((path_t *) key)->pos[dim_y]]
                                         [((path_t *) key)->pos[dim_x]] -
-          (int32_t) dungeon->pc_distance[((path_t *) with)->pos[dim_y]]
+          (int32_t) dungeon->distance[((path_t *) with)->pos[dim_y]]
                                         [((path_t *) with)->pos[dim_x]]);
 }
-
+/*
 static int32_t tunnel_cmp(const void *key, const void *with) {
   return ((int32_t) dungeon->pc_tunnel[((path_t *) key)->pos[dim_y]]
                                       [((path_t *) key)->pos[dim_x]] -
@@ -1285,7 +1285,7 @@ int pathThroughDungeon(dungeon_t *d){
       d->distance[y][x] = 255;
     }
   }
-  d->distance[d->position[dim_y]][d->position[dim_x]] = 0;
+  d->distance[d->pc.position[dim_y]][d->pc.position[dim_x]] = 0;
 
   heap_init(&h, dist_cmp, NULL);
 
