@@ -92,6 +92,8 @@ typedef struct dungeon {
    * and pulling in unnecessary data with each map cell would add a lot   *
    * of overhead to the memory system.                                    */
   uint8_t hardness[DUNGEON_Y][DUNGEON_X];
+  int distance[DUNGEON_Y][DUNGEON_X];
+  int distance2[DUNGEON_Y][DUNGEON_X]; //Might not need this one woops
   pair_t pc;
 } dungeon_t;
 
@@ -1242,6 +1244,20 @@ int pathThroughDungeon(){
   return 0;
 }
 
+//This will print the entire dungeon as a the last didget
+//of the number of spaces each cell is away from the player
+int printPaths(){
+  for(int j = 0; j < DUNGEON_Y; j++){
+    for(int i = 0; i < DUNGEON_X; i++){
+      if(d->hardness[j][i] == 0){
+	printf(%d,d->distance[j][i] % 10);
+      } else {
+	printf(' ');
+    }
+    printf("\n");
+  }
+  return 0;
+}
 
 int main(int argc, char *argv[])
 {
