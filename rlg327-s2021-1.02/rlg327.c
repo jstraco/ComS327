@@ -56,6 +56,7 @@ typedef int8_t pair_t[num_dims];
 #define DUNGEON_SAVE_FILE      "dungeon"
 #define DUNGEON_SAVE_SEMANTIC  "RLG327-" TERM
 #define DUNGEON_SAVE_VERSION   0U
+#define INFINITY               2147483647
 
 #define mappair(pair) (d->map[pair[dim_y]][pair[dim_x]])
 #define mapxy(x, y) (d->map[y][x])
@@ -1240,19 +1241,157 @@ int pathThroughWalls(){
 
 //This one will find the best path through all spaces where hardness == 0
 //This one matt and I can handle probs
-int pathThroughDungeon(){
+int pathThroughDungeon(dungeon_t *d){
+
+  heap_t h;
+  uint32_t x, y;
+  static path_t p[DUNGEON_Y][DUNGEON_X], *c;
+  static uint32_t initialized = 0;
+
+  if (!initialized) {
+    initialized = 1;
+    dungeon = d;
+    for (y = 0; y < DUNGEON_Y; y++) {
+      for (x = 0; x < DUNGEON_X; x++) {
+        p[y][x].pos[dim_y] = y;
+        p[y][x].pos[dim_x] = x;
+      }
+    }
+  }
+
+  for (y = 0; y < DUNGEON_Y; y++) {
+    for (x = 0; x < DUNGEON_X; x++) {
+      d->pc_distance[y][x] = 255;
+    }
+  }
+  d->pc_distance[d->pc.position[dim_y]][d->pc.position[dim_x]] = 0;
+
+  heap_init(&h, dist_cmp, NULL);
+
+  for (y = 0; y < DUNGEON_Y; y++) {
+    for (x = 0; x < DUNGEON_X; x++) {
+      if (mapxy(x, y) >= ter_floor) {
+        p[y][x].hn = heap_insert(&h, &p[y][x]);
+      }
+    }
+  }
+
+  while ((c = heap_remove_min(&h))) {
+    c->hn = NULL;
+    if ((p[c->pos[dim_y] - 1][c->pos[dim_x] - 1].hn) &&
+        (d->pc_distance[c->pos[dim_y] - 1][c->pos[dim_x] - 1] >
+         d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
+      d->pc_distance[c->pos[dim_y] - 1][c->pos[dim_x] - 1] =
+        d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
+      heap_decrease_key_no_replace(&h,
+                                   p[c->pos[dim_y] - 1][c->pos[dim_x] - 1].hn);
+    }
+    if ((p[c->pos[dim_y] - 1][c->pos[dim_x]    ].hn) &&
+        (d->pc_distance[c->pos[dim_y] - 1][c->pos[dim_x]    ] >
+         d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
+      d->pc_distance[c->pos[dim_y] - 1][c->pos[dim_x]    ] =
+        d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
+      heap_decrease_key_no_replace(&h,
+                                   p[c->pos[dim_y] - 1][c->pos[dim_x]    ].hn);
+    }
+    if ((p[c->pos[dim_y] - 1][c->pos[dim_x] + 1].hn) &&
+        (d->pc_distance[c->pos[dim_y] - 1][c->pos[dim_x] + 1] >
+         d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
+      d->pc_distance[c->pos[dim_y] - 1][c->pos[dim_x] + 1] =
+        d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
+      heap_decrease_key_no_replace(&h,
+                                   p[c->pos[dim_y] - 1][c->pos[dim_x] + 1].hn);
+    }
+    if ((p[c->pos[dim_y]    ][c->pos[dim_x] - 1].hn) &&
+        (d->pc_distance[c->pos[dim_y]    ][c->pos[dim_x] - 1] >
+         d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
+      d->pc_distance[c->pos[dim_y]    ][c->pos[dim_x] - 1] =
+        d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
+      heap_decrease_key_no_replace(&h,
+                                   p[c->pos[dim_y]    ][c->pos[dim_x] - 1].hn);
+    }
+    if ((p[c->pos[dim_y]    ][c->pos[dim_x] + 1].hn) &&
+        (d->pc_distance[c->pos[dim_y]    ][c->pos[dim_x] + 1] >
+         d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
+      d->pc_distance[c->pos[dim_y]    ][c->pos[dim_x] + 1] =
+        d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
+      heap_decrease_key_no_replace(&h,
+                                   p[c->pos[dim_y]    ][c->pos[dim_x] + 1].hn);
+    }
+    if ((p[c->pos[dim_y] + 1][c->pos[dim_x] - 1].hn) &&
+        (d->pc_distance[c->pos[dim_y] + 1][c->pos[dim_x] - 1] >
+         d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
+      d->pc_distance[c->pos[dim_y] + 1][c->pos[dim_x] - 1] =
+        d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
+      heap_decrease_key_no_replace(&h,
+                                   p[c->pos[dim_y] + 1][c->pos[dim_x] - 1].hn);
+    }
+    if ((p[c->pos[dim_y] + 1][c->pos[dim_x]    ].hn) &&
+        (d->pc_distance[c->pos[dim_y] + 1][c->pos[dim_x]    ] >
+         d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
+      d->pc_distance[c->pos[dim_y] + 1][c->pos[dim_x]    ] =
+        d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
+      heap_decrease_key_no_replace(&h,
+                                   p[c->pos[dim_y] + 1][c->pos[dim_x]    ].hn);
+    }
+    if ((p[c->pos[dim_y] + 1][c->pos[dim_x] + 1].hn) &&
+        (d->pc_distance[c->pos[dim_y] + 1][c->pos[dim_x] + 1] >
+         d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1)) {
+      d->pc_distance[c->pos[dim_y] + 1][c->pos[dim_x] + 1] =
+        d->pc_distance[c->pos[dim_y]][c->pos[dim_x]] + 1;
+      heap_decrease_key_no_replace(&h,
+                                   p[c->pos[dim_y] + 1][c->pos[dim_x] + 1].hn);
+    }
+  }
+  heap_delete(&h);
+  
   return 0;
+  /*
+
+int distance[DUNGEON_X];
+  bool sptSet[DUNGEON_X]; //shortest path tree
+  for (int i = 0; i < DUNGEON_X ; i++){
+    distance[i] = INFINITY;
+    sptSet[i] = false;
+  }
+  //keeps index of current node, starts with pc location
+  pair_t current;
+  current[dim_x] = d->pc[dim_x];
+  current[dim_y] = d->pc[dim_y];
+
+
+
+
+  //keeps tracks of nodes that have not yet been visited
+  int unvisited[DUNGEON_Y][DUNGEON_X];
+  //initalizes the array of unvisited nodes to 0, which means unvisited
+  for(int j = 0; j < DUNGEON_Y; j++){
+    for(int i = 0; i < DUNGEON_X; i++){
+      unvisited[j][i] = 0;
+    }
+  }
+
+  //cost is an array that store the cost to get to the represented node from the start node
+  int cost[DUNGEON_Y][DUNGEON_X];
+  //initalizes the array of cost to max value, representing infinity
+  for(int j = 0; j < DUNGEON_Y; j++){
+    for(int i = 0; i < DUNGEON_X; i++){
+      unvisited[j][i] = 0;
+    }
+  }
+   */
 }
 
 //This will print the entire dungeon as a the last didget
 //of the number of spaces each cell is away from the player
-int printPaths(){
+int printPaths(dungeon_t *d){
   for(int j = 0; j < DUNGEON_Y; j++){
     for(int i = 0; i < DUNGEON_X; i++){
       if(d->hardness[j][i] == 0){
-	printf(%d,d->distance[j][i] % 10);
+	printf("%d",d->distance[j][i] % 10);
       } else {
-	printf(' ');
+	printf(" ");
+      }
     }
     printf("\n");
   }
