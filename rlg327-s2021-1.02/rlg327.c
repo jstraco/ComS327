@@ -80,6 +80,10 @@ typedef struct room {
   pair_t size;
 } room_t;
 
+typedef struct playerCharecter {
+  dim_t position;
+} playerCharecter_t;
+
 typedef struct dungeon {
   uint16_t num_rooms;
   room_t *rooms;
@@ -1285,7 +1289,7 @@ int pathThroughDungeon(dungeon_t *d){
       d->distance[y][x] = 255;
     }
   }
-  d->distance[d->pc.position[dim_y]][d->pc.position[dim_x]] = 0;
+  d->distance[d->pc[dim_y]][d->pc[dim_x]] = 0;
 
   heap_init(&h, dist_cmp, NULL);
 
