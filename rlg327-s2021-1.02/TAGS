@@ -147,9 +147,9 @@ typedef struct path 1241,34525
   heap_node_t *hn;hn1242,34547
   uint8_t pos[pos1243,34566
 } path_t;1244,34584
-int pathThroughWalls(1248,34709
-static dungeon_t *dungeon;dungeon1252,34748
-static int32_t dist_cmp(1253,34775
-int pathThroughDungeon(1269,35588
-int printPaths(1415,40938
-int main(1429,41198
+int pathThroughWalls(1247,34666
+static dungeon_t *dungeon;dungeon1251,34705
+static int32_t dist_cmp(1252,34732
+int pathThroughDungeon(1268,35545
+int printPaths(1414,40888
+int main(1428,41148

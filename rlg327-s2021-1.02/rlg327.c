@@ -1295,7 +1295,7 @@ int pathThroughDungeon(dungeon_t *d){
       if (mapxy(x, y) >= ter_floor) {
 	printf("mapxy is %d,%d\n",x,y);
 	printf("%i,%i\n",x+1,y+1);
-        p[y][x].hn = heap_insert(&h, &p[y][x]);
+	p[y][x].hn = heap_insert(&h, &p[y][x]);
       }
       else{
 	//p[y][x].hn = NULL;
@@ -1560,16 +1560,10 @@ int main(int argc, char *argv[])
   }
 
   render_dungeon(&d);
-<<<<<<< HEAD
   printf("before path through dungeon\n");
   pathThroughDungeon(&d);
   //printf("made it though paththroughdungeon");
   // printPaths(&d);
-
-=======
-  pathThroughDungeon(&d);
-  printPaths(&d);
->>>>>>> fa332406a03190bd3d28181540b5969994b82546
   if (do_save) {
     if (do_save_seed) {
        /* 10 bytes for number, plus dot, extention and null terminator. */
