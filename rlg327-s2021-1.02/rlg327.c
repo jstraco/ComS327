@@ -1560,11 +1560,16 @@ int main(int argc, char *argv[])
   }
 
   render_dungeon(&d);
+<<<<<<< HEAD
   printf("before path through dungeon\n");
   pathThroughDungeon(&d);
   //printf("made it though paththroughdungeon");
   // printPaths(&d);
 
+=======
+  pathThroughDungeon(&d);
+  printPaths(&d);
+>>>>>>> fa332406a03190bd3d28181540b5969994b82546
   if (do_save) {
     if (do_save_seed) {
        /* 10 bytes for number, plus dot, extention and null terminator. */
