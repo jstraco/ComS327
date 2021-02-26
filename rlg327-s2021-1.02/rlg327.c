@@ -1244,7 +1244,6 @@ typedef struct path {
 } path_t;
 
 //this method will find the best path to a target where hardness < 255
-//this is the easier one, Nick can do this
 int pathThroughWalls(){
   return 0;
 }
@@ -1267,12 +1266,12 @@ static int32_t tunnel_cmp(const void *key, const void *with) {
 //This one will find the best path through all spaces where hardness == 0
 //This one matt and I can handle probs
 int pathThroughDungeon(dungeon_t *d){
-
   heap_t h;
   uint32_t x, y;
   static path_t p[DUNGEON_Y][DUNGEON_X], *c;
+  
   static uint32_t initialized = 0;
-
+  printf("test print 0\n");
   if (!initialized) {
     initialized = 1;
     //dungeon = d;
@@ -1283,7 +1282,6 @@ int pathThroughDungeon(dungeon_t *d){
       }
     }
   }
-
   for (y = 0; y < DUNGEON_Y; y++) {
     for (x = 0; x < DUNGEON_X; x++) {
       d->distance[y][x] = 255;
@@ -1292,15 +1290,19 @@ int pathThroughDungeon(dungeon_t *d){
   d->distance[d->pc[dim_y]][d->pc[dim_x]] = 0;
 
   heap_init(&h, dist_cmp, NULL);
-
   for (y = 0; y < DUNGEON_Y; y++) {
     for (x = 0; x < DUNGEON_X; x++) {
       if (mapxy(x, y) >= ter_floor) {
+	printf("mapxy is %d,%d\n",x,y);
+	printf("%i,%i\n",x+1,y+1);
         p[y][x].hn = heap_insert(&h, &p[y][x]);
+      }
+      else{
+	//p[y][x].hn = NULL;
       }
     }
   }
-
+  printf("test print 3\n");
   while ((c = heap_remove_min(&h))) {
     c->hn = NULL;
     if ((p[c->pos[dim_y] - 1][c->pos[dim_x] - 1].hn) &&
@@ -1558,6 +1560,10 @@ int main(int argc, char *argv[])
   }
 
   render_dungeon(&d);
+  printf("before path through dungeon\n");
+  pathThroughDungeon(&d);
+  //printf("made it though paththroughdungeon");
+  // printPaths(&d);
 
   if (do_save) {
     if (do_save_seed) {
