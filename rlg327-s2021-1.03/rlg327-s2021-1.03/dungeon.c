@@ -607,6 +607,44 @@ static int make_rooms(dungeon_t *d)
   return 0;
 }
 
+static void place_monsters(dungeon_t *d) {
+  if(d->numMon == 0)
+    d->numMon = 10;
+
+  d->monsters = malloc(d->numMon * sizeof(monster_t));
+
+
+  printf("here\n");
+
+  for(int i = 0; i < d->numMon; i++) {
+    d->monsters[i].smart = rand() % 2;
+    d->monsters[i].telepath = rand() % 2;
+    d->monsters[i].tunnel = rand() % 2;
+    d->monsters[i].erratic = rand() % 2;
+
+    if(d->monsters[i].smart) {
+      d->monsters[i].type += 1;
+    }
+    if(d->monsters[i].telepath) {
+      d->monsters[i].type += 2;
+    }
+    if(d->monsters[i].tunnel) {
+      d->monsters[i].type += 4;
+    }
+    if(d->monsters[i].erratic) {
+      d->monsters[i].type += 8;
+    }
+
+    d->monsters[i].speed = (rand() % 16) + 5;
+
+    int monRoom = rand() % d->num_rooms;
+    while(1) {
+      //set position
+      break;
+    }
+  }
+}
+
 int gen_dungeon(dungeon_t *d)
 {
   empty_dungeon(d);
@@ -616,6 +654,9 @@ int gen_dungeon(dungeon_t *d)
   } while (place_rooms(d));
   connect_rooms(d);
   place_stairs(d);
+  place_monsters(d);
+
+  
 
   return 0;
 }
