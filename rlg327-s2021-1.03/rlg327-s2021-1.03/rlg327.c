@@ -186,6 +186,8 @@ int main(int argc, char *argv[])
                             (rand() % d.rooms[0].size[dim_y]));
   }
 
+  place_monsters(&d);
+
   printf("PC is at (y, x): %d, %d\n",
          d.pc.position[dim_y], d.pc.position[dim_x]);
 
@@ -193,10 +195,10 @@ int main(int argc, char *argv[])
 
   dijkstra(&d);
   dijkstra_tunnel(&d);
-  render_distance_map(&d);
-  render_tunnel_distance_map(&d);
-  render_hardness_map(&d);
-  render_movement_cost_map(&d);
+  //render_distance_map(&d);
+  //render_tunnel_distance_map(&d);
+  //render_hardness_map(&d);
+  //render_movement_cost_map(&d);
 
   if (do_save)
   {

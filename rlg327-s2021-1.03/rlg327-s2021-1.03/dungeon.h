@@ -56,6 +56,7 @@ typedef struct monster
   uint8_t erratic;
   pair_t position;
   uint8_t speed;
+  char symbol;
 } monster_t;
 
 typedef struct characters
