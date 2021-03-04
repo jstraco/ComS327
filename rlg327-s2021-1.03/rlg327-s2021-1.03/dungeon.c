@@ -607,7 +607,7 @@ static int make_rooms(dungeon_t *d)
   return 0;
 }
 
-static void place_monsters(dungeon_t *d) {
+void place_monsters(dungeon_t *d) {
   if(d->numMon == 0)
     d->numMon = 10;
 
@@ -639,7 +639,13 @@ static void place_monsters(dungeon_t *d) {
 
     int monRoom = rand() % d->num_rooms;
     while(1) {
-      //set position
+      int mon_x_pos = rand() % d->rooms[monRoom].size[dim_x];
+      int mon_y_pos = rand() % d->rooms[monRoom].size[dim_y];
+      if(d->characters[mon_y_pos][mon_x_pos]->monster == NULL && d->characters[mon_y_pos][mon_x_pos]->pc == NULL){
+	//d->characters.position[dim_x] = mon_x_pos;
+	//d->characters.position[dim_y] = mon_y_pos;
+	d->characters[mon_y_pos][mon_x_pos]->monster->type = d->monsters[i].type; //this might work but idk, least it compiles.
+      }
       break;
     }
   }

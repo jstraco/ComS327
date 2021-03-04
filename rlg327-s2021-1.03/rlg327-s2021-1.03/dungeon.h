@@ -49,15 +49,23 @@ typedef struct pc
 
 typedef struct monster
 {
-  pair_t position;
   uint32_t type;
   uint8_t smart;
   uint8_t telepath;
   uint8_t tunnel;
   uint8_t erratic;
+  pair_t position;
   uint8_t speed;
-  pair_t pcPos;
 } monster_t;
+
+typedef struct characters
+{
+  struct pc *pc;
+  struct monster *monster;
+  int is_alive;
+  pair_t position;
+  uint8_t speed;
+} character_t;
 
 typedef struct dungeon
 {
@@ -75,6 +83,7 @@ typedef struct dungeon
   uint8_t hardness[DUNGEON_Y][DUNGEON_X];
   uint8_t pc_distance[DUNGEON_Y][DUNGEON_X];
   uint8_t pc_tunnel[DUNGEON_Y][DUNGEON_X];
+  struct characters *characters[DUNGEON_Y][DUNGEON_X];
   pc_t pc;
   uint8_t numMon;
   monster_t *monsters;
@@ -91,5 +100,6 @@ void render_distance_map(dungeon_t *d);
 void render_tunnel_distance_map(dungeon_t *d);
 void render_hardness_map(dungeon_t *d);
 void render_movement_cost_map(dungeon_t *d);
+void place_monsters(dungeon_t *d);
 
 #endif
