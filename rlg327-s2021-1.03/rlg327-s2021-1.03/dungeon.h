@@ -45,10 +45,12 @@ typedef struct pc
 {
   pair_t position;
   uint8_t speed;
+  int isAlive;
 } pc_t;
 
 typedef struct monster
 {
+  int isAlive;
   uint32_t type;
   uint8_t smart;
   uint8_t telepath;
