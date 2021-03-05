@@ -213,8 +213,13 @@ int main(int argc, char *argv[])
     usleep(250000);
   }
   free(d.monsters);
-  printf("\naye\n");
-
+  
+  if(d.pc.is_alive){
+    printf("You win!!!\n");
+  }
+  else {
+    printf("Better luck next time!\n");
+  }
   if (do_save)
   {
     if (do_save_seed)

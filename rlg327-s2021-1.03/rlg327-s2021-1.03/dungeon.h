@@ -64,15 +64,6 @@ typedef struct monster
   int alive;
 } monster_t;
 
-typedef struct characters
-{
-  struct pc *pc;
-  struct monster *monster;
-  int is_alive;
-  pair_t position;
-  uint8_t speed;
-} character_t;
-
 typedef struct dungeon
 {
   uint32_t num_rooms;

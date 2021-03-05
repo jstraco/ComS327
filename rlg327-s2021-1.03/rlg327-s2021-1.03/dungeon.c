@@ -672,8 +672,7 @@ static int make_rooms(dungeon_t *d)
 {
   uint32_t i;
 
-  for (i = MIN_ROOMS; i < MAX_ROOMS && rand_under(5, 8); i++)
-    ;
+  for (i = MIN_ROOMS; i < MAX_ROOMS && rand_under(5, 8); i++);
   d->num_rooms = i;
   d->rooms = malloc(sizeof(*d->rooms) * d->num_rooms);
 
@@ -699,7 +698,7 @@ void place_monsters(dungeon_t *d)
   if (d->numMon == 0)
     d->numMon = 10;
 
-  d->monsters = malloc(d->numMon * sizeof(character_t));
+  d->monsters = malloc(d->numMon * sizeof(monster_t));
   for (int i = 0; i < d->numMon; i++)
   {
     d->monsters[i].alive = 1;
@@ -778,14 +777,6 @@ void place_monsters(dungeon_t *d)
 
       d->monsters[i].position[dim_x] = mon_x_pos;
       d->monsters[i].position[dim_y] = mon_y_pos;
-      // if (d->characters[mon_y_pos
-      //mon_x_pos]->monster == NULL && d->characters[mon_y_pos][mon_x_pos]->pc == NULL)
-      // {
-
-      //   //d->characters.position[dim_x] = mon_x_pos;
-      //   //d->characters.position[dim_y] = mon_y_pos;
-      //   //d->characters[mon_y_pos][mon_x_pos]->monster->type = d->monsters[i].type; //this might work but idk, least it compiles.
-      // }
       break;
     }
   }
@@ -815,7 +806,7 @@ void sortMonsters(dungeon_t *d){
     } 
 }
 
-void moveMonster(dungeon_t *d, int i){
+void moveMonster(dungeon_t *d, int i) {
   if(!d->monsters[i].alive){
     return;
   }
