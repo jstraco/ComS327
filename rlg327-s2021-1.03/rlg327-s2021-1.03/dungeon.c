@@ -694,7 +694,7 @@ static int make_rooms(dungeon_t *d)
   return 0;
 }
 
-void place_monsters(dungeon_t *d, heap_t *h)
+void place_monsters(dungeon_t *d)
 {
   if (d->numMon == 0)
     d->numMon = 10;
@@ -702,6 +702,7 @@ void place_monsters(dungeon_t *d, heap_t *h)
   d->monsters = malloc(d->numMon * sizeof(character_t));
   for (int i = 0; i < d->numMon; i++)
   {
+    d->monsters[i].alive = 1;
     d->monsters[i].smart = rand() % 2;
     d->monsters[i].telepath = rand() % 2;
     d->monsters[i].tunnel = rand() % 2;
@@ -787,6 +788,14 @@ void place_monsters(dungeon_t *d, heap_t *h)
       break;
     }
   }
+}
+
+int living_monster(dungeon_t *d){
+  int count = 0;
+  for (int i = 0; i < d->numMon; i++){
+    count += d->monsters[i].alive;
+  }
+  return count;
 }
 
 int gen_dungeon(dungeon_t *d)
