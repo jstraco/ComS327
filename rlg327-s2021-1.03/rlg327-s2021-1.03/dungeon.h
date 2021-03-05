@@ -51,7 +51,7 @@ typedef struct pc
 
 typedef struct monster
 {
-  uint32_t type;
+  uint8_t type;
   uint8_t smart;
   uint8_t telepath;
   uint8_t tunnel;
@@ -103,4 +103,9 @@ int living_monsters(dungeon_t *d);
 void moveSmart(dungeon_t *d, int index);
 void moveMonster(dungeon_t *d, int i);
 void moveSmartTunnel(dungeon_t *d, int index);
+int is_smart(monster_t m);
+int is_telepathic(monster_t m);
+int is_tunnel(monster_t m);
+int is_erratic(monster_t m);
+
 #endif

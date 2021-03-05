@@ -702,33 +702,31 @@ void place_monsters(dungeon_t *d)
   for (int i = 0; i < d->numMon; i++)
   {
     d->monsters[i].alive = 1;
-    d->monsters[i].smart = rand() % 2;
-    d->monsters[i].telepath = rand() % 2;
-    d->monsters[i].tunnel = rand() % 2;
-    d->monsters[i].erratic = rand() % 2;
+    d->monsters[i].type = 0;
 
-    int monstRank = 0;
-
-    if (d->monsters[i].smart)
+    if (rand() % 2)
     {
-      monstRank += 1;
+      d->monsters[i].type += 1;
     }
-    if (d->monsters[i].telepath)
+    if (rand() % 2)
     {
-      monstRank += 2;
+      d->monsters[i].type += 2;
     }
-    if (d->monsters[i].tunnel)
+    if (rand() % 2)
     {
-      monstRank += 4;
+      d->monsters[i].type += 4;
     }
-    if (d->monsters[i].erratic)
+    if (rand() % 2)
     {
-      monstRank += 8;
+      d->monsters[i].type += 8;
     }
 
-    d->monsters[i].type = htobe32(monstRank);
 
-    switch (monstRank)
+    uint8_t test = d->monsters[i].type;
+    printf("%d\n", test);
+
+
+    switch (d->monsters[i].type)
     {
     case 10:
       d->monsters[i].symbol = 'a';
@@ -749,7 +747,7 @@ void place_monsters(dungeon_t *d)
       d->monsters[i].symbol = 'f';
       break;
     default:
-      d->monsters[i].symbol = monstRank + '0';
+      d->monsters[i].symbol = d->monsters[i].type + '0';
       break;
     }
 
@@ -782,6 +780,47 @@ void place_monsters(dungeon_t *d)
   }
 }
 
+int is_smart(monster_t m) {
+  if(m.type % 2 > 0) {
+    return 1;
+  }
+  return 0;
+}
+
+int is_telepathic(monster_t m) {
+  switch(m.type)
+  {
+    case 2:
+    case 3:
+    case 6:
+    case 7:
+    case 10:
+    case 11:
+    case 14:
+    case 15:
+      return 1;
+      break;
+    default:
+      return 0;
+      break;
+  }
+}
+
+int is_tunnel(monster_t m) {
+  if((3 < m.type && m.type < 8) ||  m.type > 11) {
+    return 1;
+  }
+  return 0;
+}
+
+int is_erratic(monster_t m) {
+  if(m.type > 7) {
+    return 1;
+  }
+  return 0;
+}
+
+
 int living_monsters(dungeon_t *d){
   int count = 0;
   for (int i = 0; i < d->numMon; i++){
@@ -810,11 +849,11 @@ void moveMonster(dungeon_t *d, int i) {
   if(!d->monsters[i].alive){
     return;
   }
-  if(!d->monsters[i].tunnel){
+  if(!is_tunnel(d->monsters[i])){
     //if(d->monsters[i].room_num == d->pc.room_num){
       moveSmart(d, i);
     //}
-  } else if(d->monsters[i].tunnel){
+  } else if(is_tunnel(d->monsters[i])){
       moveSmartTunnel(d, i);
   }
   if(d->monsters[i].position[dim_x] == d->pc.position[dim_x] &&
