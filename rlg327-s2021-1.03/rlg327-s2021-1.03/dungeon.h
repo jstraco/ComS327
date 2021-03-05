@@ -46,6 +46,7 @@ typedef struct pc
   pair_t position;
   uint8_t speed;
   int is_alive;
+  int room_num;
 } pc_t;
 
 typedef struct monster
@@ -56,7 +57,9 @@ typedef struct monster
   uint8_t tunnel;
   uint8_t erratic;
   pair_t position;
+  pair_t pc_pos;
   uint8_t speed;
+  int room_num;
   char symbol;
   int alive;
 } monster_t;
@@ -106,5 +109,7 @@ void render_movement_cost_map(dungeon_t *d);
 void place_monsters(dungeon_t *d);
 void sortMonsters(dungeon_t *d);
 int living_monsters(dungeon_t *d);
-
+void moveSmart(dungeon_t *d, int index);
+void moveMonster(dungeon_t *d, int i);
+void moveSmartTunnel(dungeon_t *d, int index);
 #endif

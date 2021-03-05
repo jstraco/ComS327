@@ -8,7 +8,7 @@ typedef enum dim 7,190
 } dim_t;11,238
 typedef int8_t pair_t[pair_t13,248
 
-dungeon.c,1595
+dungeon.c,1745
 #define DUMP_HARDNESS_IMAGES 17,285
 typedef struct corridor_path19,317
   heap_node_t *hn;hn21,348
@@ -37,28 +37,33 @@ static int place_rooms(603,16768
 static void place_stairs(647,17972
 static int make_rooms(671,18573
 void place_monsters(697,19143
-int gen_dungeon(792,21493
-void render_dungeon(806,21657
-void delete_dungeon(863,22946
-void init_dungeon(868,23003
-int write_dungeon_map(873,23060
-int write_rooms(888,23294
-uint16_t count_up_stairs(911,23768
-uint16_t count_down_stairs(930,24031
-int write_stairs(949,24298
-uint32_t calculate_dungeon_size(987,25077
-int write_dungeon(998,25547
-int read_dungeon_map(1070,27084
-int read_stairs(1099,27716
-int read_rooms(1124,28197
-int read_dungeon(1186,29957
-int read_pgm(1278,31832
-void render_hardness_map(1380,34296
-void render_movement_cost_map(1406,34827
-void render_distance_map(1436,35378
-void render_tunnel_distance_map(1484,36472
+int living_monsters(794,21606
+void sortMonsters(802,21755
+void moveMonster(815,22081
+void moveSmart(832,22506
+void moveSmartTunnel(849,23236
+int gen_dungeon(868,24063
+void render_dungeon(882,24227
+void delete_dungeon(939,25518
+void init_dungeon(944,25575
+int write_dungeon_map(949,25632
+int write_rooms(964,25866
+uint16_t count_up_stairs(987,26340
+uint16_t count_down_stairs(1006,26603
+int write_stairs(1025,26870
+uint32_t calculate_dungeon_size(1063,27649
+int write_dungeon(1074,28119
+int read_dungeon_map(1146,29656
+int read_stairs(1175,30288
+int read_rooms(1200,30769
+int read_dungeon(1262,32529
+int read_pgm(1354,34404
+void render_hardness_map(1456,36868
+void render_movement_cost_map(1482,37399
+void render_distance_map(1512,37950
+void render_tunnel_distance_map(1560,39044
 
-dungeon.h,1804
+dungeon.h,1921
 #define DUNGEON_H2,18
 #define DUNGEON_X 7,74
 #define DUNGEON_Y 8,95
@@ -94,36 +99,41 @@ typedef struct room38,809
 typedef struct pc44,876
   pair_t position;46,896
   uint8_t speed;47,915
-} pc_t;48,932
-typedef struct monster50,941
-  uint32_t type;52,966
-  uint8_t smart;53,983
-  uint8_t telepath;54,1000
-  uint8_t tunnel;55,1020
-  uint8_t erratic;56,1038
-  pair_t position;57,1057
-  uint8_t speed;58,1076
-  char symbol;59,1093
-} monster_t;60,1108
-typedef struct characters62,1122
-  struct pc *pc;pc64,1150
-  struct monster *monster;monster65,1167
-  int is_alive;66,1194
-  pair_t position;67,1210
-  uint8_t speed;68,1229
-} character_t;69,1246
-typedef struct dungeon71,1262
-  uint32_t num_rooms;73,1287
-  room_t *rooms;rooms74,1309
-  terrain_type_t map[map75,1326
-  uint8_t hardness[hardness84,1979
-  uint8_t pc_distance[pc_distance85,2021
-  uint8_t pc_tunnel[pc_tunnel86,2066
-  struct characters *characters[characters87,2109
-  pc_t pc;88,2164
-  uint8_t numMon;89,2175
-  monster_t *monsters;monsters90,2193
-} dungeon_t;91,2216
+  int is_alive;48,932
+  int room_num;49,948
+} pc_t;50,964
+typedef struct monster52,973
+  uint32_t type;54,998
+  uint8_t smart;55,1015
+  uint8_t telepath;56,1032
+  uint8_t tunnel;57,1052
+  uint8_t erratic;58,1070
+  pair_t position;59,1089
+  pair_t pc_pos;60,1108
+  uint8_t speed;61,1125
+  int room_num;62,1142
+  char symbol;63,1158
+  int alive;64,1173
+} monster_t;65,1186
+typedef struct characters67,1200
+  struct pc *pc;pc69,1228
+  struct monster *monster;monster70,1245
+  int is_alive;71,1272
+  pair_t position;72,1288
+  uint8_t speed;73,1307
+} character_t;74,1324
+typedef struct dungeon76,1340
+  uint32_t num_rooms;78,1365
+  room_t *rooms;rooms79,1387
+  terrain_type_t map[map80,1404
+  uint8_t hardness[hardness89,2057
+  uint8_t pc_distance[pc_distance90,2099
+  uint8_t pc_tunnel[pc_tunnel91,2144
+  struct characters *characters[characters92,2187
+  pc_t pc;93,2242
+  uint8_t numMon;94,2253
+  monster_t *monsters;monsters95,2271
+} dungeon_t;96,2294
 
 heap.c,1020
 struct heap_node 8,99
@@ -185,9 +195,9 @@ path.h,93
 # define HARDNESS_PER_TURN 4,32
 typedef struct dungeon dungeon_t;6,63
 
-rlg327.c,35
-void usage(9,122
-int main(19,332
+rlg327.c,36
+void usage(11,161
+int main(21,371
 
 utils.c,25
 int makedirectory(9,124

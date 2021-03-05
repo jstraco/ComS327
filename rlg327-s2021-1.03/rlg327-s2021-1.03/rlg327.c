@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
     d.pc.position[dim_y] = (d.rooms[0].position[dim_y] +
                             (rand() % d.rooms[0].size[dim_y]));
   }
-
+  d.pc.room_num = 0;
   place_monsters(&d);
 
   printf("PC is at (y, x): %d, %d\n",
@@ -200,7 +200,7 @@ int main(int argc, char *argv[])
   //render_hardness_map(&d);
   //render_movement_cost_map(&d);
 
-  sortMonsters(&d);
+  //sortMonsters(&d);
   d.pc.is_alive = 1;
   while(d.pc.is_alive && living_monsters(&d)){
     dijkstra(&d);
@@ -212,7 +212,8 @@ int main(int argc, char *argv[])
     render_dungeon(&d);
     usleep(250000);
   }
-
+  free(d.monsters);
+  printf("\naye\n");
 
   if (do_save)
   {

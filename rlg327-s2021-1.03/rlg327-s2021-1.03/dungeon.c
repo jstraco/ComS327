@@ -756,12 +756,13 @@ void place_monsters(dungeon_t *d)
 
     d->monsters[i].speed = (rand() % 16) + 5;
 
-    int monRoom = rand() % d->num_rooms;
+    d->monsters[i].room_num = rand() % d->num_rooms;
+    
     while (1)
     {
       int isValid = 1;
-      int mon_x_pos = (rand() % d->rooms[monRoom].size[dim_x]) + d->rooms[monRoom].position[dim_x];
-      int mon_y_pos = (rand() % d->rooms[monRoom].size[dim_y]) + d->rooms[monRoom].position[dim_y];
+      int mon_x_pos = (rand() % d->rooms[d->monsters[i].room_num ].size[dim_x]) + d->rooms[d->monsters[i].room_num].position[dim_x];
+      int mon_y_pos = (rand() % d->rooms[d->monsters[i].room_num ].size[dim_y]) + d->rooms[d->monsters[i].room_num].position[dim_y];
       for (int j = 0; j < i; j++)
       {
         if (d->monsters[j].position[dim_x] == mon_x_pos && d->monsters[j].position[dim_y] == mon_y_pos)
@@ -803,7 +804,7 @@ void sortMonsters(dungeon_t *d){
         monster_t m = d->monsters[i]; 
         int j = i - 1; 
 
-        while (j >= 0 && d->monsters[j].speed > m.speed) { 
+        while (j >= 0 && d->monsters[j].speed < m.speed) { 
             d->monsters[j + 1] = d->monsters[i]; 
             j = j - 1; 
         } 
@@ -812,7 +813,56 @@ void sortMonsters(dungeon_t *d){
 }
 
 void moveMonster(dungeon_t *d, int i){
-  if(d->monsters[i])
+  if(!d->monsters[i].alive){
+    return;
+  }
+  if(!d->monsters[i].tunnel){
+    //if(d->monsters[i].room_num == d->pc.room_num){
+      moveSmart(d, i);
+    //}
+  } else if(d->monsters[i].tunnel){
+      moveSmartTunnel(d, i);
+  }
+  if(d->monsters[i].position[dim_x] == d->pc.position[dim_x] &&
+     d->monsters[i].position[dim_y] == d->pc.position[dim_y]){
+    d->pc.is_alive = 0;
+  }
+}
+
+void moveSmart(dungeon_t *d, int index){
+  int lowest = 255;
+  pair_t move_to;
+  for (int j = -1; j < 2; j++){
+    for(int i = -1; i < 2; i++){
+      if(d->pc_distance[d->monsters[index].position[dim_y]+j][d->monsters[index].position[dim_x]+i] < lowest 
+         && d->map[d->monsters[index].position[dim_y]+j][d->monsters[index].position[dim_x]+i] != ter_wall){
+        lowest = d->pc_distance[d->monsters[index].position[dim_y]+j][d->monsters[index].position[dim_x]+i];
+        move_to[dim_y] = d->monsters[index].position[dim_y]+j;
+        move_to[dim_x] = d->monsters[index].position[dim_x]+i;
+      }
+    }
+  }
+  d->monsters[index].position[dim_y] = move_to[dim_y];
+  d->monsters[index].position[dim_x] = move_to[dim_x]; 
+}
+
+void moveSmartTunnel(dungeon_t *d, int index){
+  int lowest = 255;
+  pair_t move_to;
+  for (int j = -1; j < 2; j++){
+    for(int i = -1; i < 2; i++){
+      if(d->pc_tunnel[d->monsters[index].position[dim_y]+j][d->monsters[index].position[dim_x]+i] < lowest){
+        lowest = d->pc_tunnel[d->monsters[index].position[dim_y]+j][d->monsters[index].position[dim_x]+i];
+        move_to[dim_y] = d->monsters[index].position[dim_y]+j;
+        move_to[dim_x] = d->monsters[index].position[dim_x]+i;
+      }
+    }
+  }
+  d->monsters[index].position[dim_y] = move_to[dim_y];
+  d->monsters[index].position[dim_x] = move_to[dim_x]; 
+  if(d->map[d->monsters[index].position[dim_y]][d->monsters[index].position[dim_x]] == ter_wall){
+    d->map[d->monsters[index].position[dim_y]][d->monsters[index].position[dim_x]] = ter_floor_hall;
+  }
 }
 
 int gen_dungeon(dungeon_t *d)
@@ -846,7 +896,7 @@ void render_dungeon(dungeon_t *d)
       }
       if(monPlace)
       {
-        continue;
+        //continue;
       }
       else if (d->pc.position[dim_x] == p[dim_x] && d->pc.position[dim_y] == p[dim_y])
       {
