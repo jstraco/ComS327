@@ -45,11 +45,16 @@ typedef struct pc
 {
   pair_t position;
   uint8_t speed;
+<<<<<<< HEAD
   int is_alive = 1;
+=======
+  int isAlive;
+>>>>>>> 8d74f102edff8d3ffba574e7e189ca319d248de5
 } pc_t;
 
 typedef struct monster
 {
+  int isAlive;
   uint32_t type;
   uint8_t smart;
   uint8_t telepath;
