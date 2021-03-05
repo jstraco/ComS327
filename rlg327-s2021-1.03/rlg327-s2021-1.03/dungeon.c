@@ -694,7 +694,7 @@ static int make_rooms(dungeon_t *d)
   return 0;
 }
 
-void place_monsters(dungeon_t *d)
+void place_monsters(dungeon_t *d, heap_t *h)
 {
   if (d->numMon == 0)
     d->numMon = 10;

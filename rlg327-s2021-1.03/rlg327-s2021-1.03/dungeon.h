@@ -45,6 +45,7 @@ typedef struct pc
 {
   pair_t position;
   uint8_t speed;
+  int is_alive = 1;
 } pc_t;
 
 typedef struct monster

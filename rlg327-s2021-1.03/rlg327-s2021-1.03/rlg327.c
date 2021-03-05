@@ -5,6 +5,7 @@
 
 #include "dungeon.h"
 #include "path.h"
+#include "heap.h"
 
 void usage(char *name)
 {
@@ -27,6 +28,7 @@ int main(int argc, char *argv[])
   char *save_file;
   char *load_file;
   char *pgm_file;
+  heap_t h;
 
   /* Quiet a false positive from valgrind. */
   memset(&d, 0, sizeof(d));
@@ -186,7 +188,7 @@ int main(int argc, char *argv[])
                             (rand() % d.rooms[0].size[dim_y]));
   }
 
-  place_monsters(&d);
+  place_monsters(&d, &h);
 
   printf("PC is at (y, x): %d, %d\n",
          d.pc.position[dim_y], d.pc.position[dim_x]);
@@ -199,6 +201,14 @@ int main(int argc, char *argv[])
   //render_tunnel_distance_map(&d);
   //render_hardness_map(&d);
   //render_movement_cost_map(&d);
+
+  d.pc.is_alive = 1;
+  while(d.pc.is_alive && h.size > 1){
+    dijkstra(&d);
+    dijkstra_tunnel(&d);
+
+
+  }
 
   if (do_save)
   {
