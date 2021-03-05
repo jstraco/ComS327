@@ -811,6 +811,10 @@ void sortMonsters(dungeon_t *d){
     } 
 }
 
+void moveMonster(dungeon_t *d, int i){
+  if(d->monsters[i])
+}
+
 int gen_dungeon(dungeon_t *d)
 {
   empty_dungeon(d);

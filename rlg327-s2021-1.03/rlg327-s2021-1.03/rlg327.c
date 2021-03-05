@@ -206,7 +206,7 @@ int main(int argc, char *argv[])
     dijkstra_tunnel(&d);
 
     for(int i = 0; i < d.numMon; i++){
-      moveMonster(&d, d.monsters[i]);
+      moveMonster(&d, i);
     }
     render_dungeon(&d);
     usleep(250000);
