@@ -209,6 +209,7 @@ int main(int argc, char *argv[])
     for(int i = 0; i < d.numMon; i++){
       moveMonster(&d, i);
     }
+    movePc(&d);
     render_dungeon(&d);
     usleep(250000);
   }

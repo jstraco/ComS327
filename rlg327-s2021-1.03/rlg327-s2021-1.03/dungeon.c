@@ -722,10 +722,6 @@ void place_monsters(dungeon_t *d)
     }
 
 
-    uint8_t test = d->monsters[i].type;
-    printf("%d\n", test);
-
-
     switch (d->monsters[i].type)
     {
     case 10:
@@ -905,6 +901,26 @@ void moveSmartTunnel(dungeon_t *d, int index){
   if(d->map[d->monsters[index].position[dim_y]][d->monsters[index].position[dim_x]] == ter_wall){
     d->map[d->monsters[index].position[dim_y]][d->monsters[index].position[dim_x]] = ter_floor_hall;
   }
+}
+
+void movePc(dungeon_t *d){
+  if(d->pc.is_alive == 0){
+    return;
+  }
+  if(d->map[d->pc.position[dim_y]+1][d->pc.position[dim_x]] == ter_floor_room){
+      d->pc.position[dim_y] = d->pc.position[dim_y]+1;
+    }
+  else{
+      d->pc.position[dim_y] = d->pc.position[dim_y]-1;
+    }
+
+  
+  if(d->map[d->pc.position[dim_y]][d->pc.position[dim_x]+1] == ter_floor_room){
+      d->pc.position[dim_x] = d->pc.position[dim_x]+1;
+    }
+    else{
+      d->pc.position[dim_x] = d->pc.position[dim_x]-1;
+    }
 }
 
 int gen_dungeon(dungeon_t *d)

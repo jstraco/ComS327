@@ -107,5 +107,6 @@ int is_smart(monster_t m);
 int is_telepathic(monster_t m);
 int is_tunnel(monster_t m);
 int is_erratic(monster_t m);
+void movePc(dungeon_t *d);
 
 #endif
