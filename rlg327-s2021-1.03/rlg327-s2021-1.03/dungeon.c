@@ -798,6 +798,19 @@ int living_monster(dungeon_t *d){
   return count;
 }
 
+void sortMonsters(dungeon_t *d){
+  for (int i = 1; i < d->numMon; i++) { 
+        monster_t m = d->monsters[i]; 
+        int j = i - 1; 
+
+        while (j >= 0 && d->monsters[j].speed > m.speed) { 
+            d->monsters[j + 1] = d->monsters[i]; 
+            j = j - 1; 
+        } 
+        d->monsters[j + 1] = m; 
+    } 
+}
+
 int gen_dungeon(dungeon_t *d)
 {
   empty_dungeon(d);
