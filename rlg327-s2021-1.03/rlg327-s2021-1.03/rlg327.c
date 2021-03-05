@@ -200,7 +200,7 @@ int main(int argc, char *argv[])
   //render_hardness_map(&d);
   //render_movement_cost_map(&d);
 
-  //sortMonsters(&d);
+  sortMonsters(&d);
   d.pc.is_alive = 1;
   while(d.pc.is_alive && living_monsters(&d)){
     dijkstra(&d);

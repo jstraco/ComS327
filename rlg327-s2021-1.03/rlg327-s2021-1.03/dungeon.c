@@ -800,15 +800,18 @@ int living_monsters(dungeon_t *d){
 }
 
 void sortMonsters(dungeon_t *d){
+  if(d->numMon == 1){
+    return;
+  }
   for (int i = 1; i < d->numMon; i++) { 
         monster_t m = d->monsters[i]; 
         int j = i - 1; 
 
         while (j >= 0 && d->monsters[j].speed < m.speed) { 
-            d->monsters[j + 1] = d->monsters[i]; 
+            d->monsters[j + 1] = d->monsters[j]; 
             j = j - 1; 
         } 
-        d->monsters[j + 1] = m; 
+        d->monsters[j+1] = m; 
     } 
 }
 
@@ -826,6 +829,15 @@ void moveMonster(dungeon_t *d, int i){
   if(d->monsters[i].position[dim_x] == d->pc.position[dim_x] &&
      d->monsters[i].position[dim_y] == d->pc.position[dim_y]){
     d->pc.is_alive = 0;
+  }
+  for(int j = 0; j < d->numMon; j++){
+    if(j == i){
+      continue;
+    }
+    if(d->monsters[i].position[dim_x] == d->monsters[j].position[dim_x] &&
+     d->monsters[i].position[dim_y] == d->monsters[j].position[dim_y]){
+       d->monsters[j].alive = 0;
+     }
   }
 }
 
@@ -889,7 +901,7 @@ void render_dungeon(dungeon_t *d)
     {
       int monPlace = 0;
       for(int i = 0; i < d->numMon; i++) {
-        if (d->monsters[i].position[dim_x] == p[dim_x] && d->monsters[i].position[dim_y] == p[dim_y]) {
+        if (d->monsters[i].alive && d->monsters[i].position[dim_x] == p[dim_x] && d->monsters[i].position[dim_y] == p[dim_y]) {
           putchar(d->monsters[i].symbol);
           monPlace = 1;
         }
