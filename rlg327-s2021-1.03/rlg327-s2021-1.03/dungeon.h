@@ -104,5 +104,7 @@ void render_tunnel_distance_map(dungeon_t *d);
 void render_hardness_map(dungeon_t *d);
 void render_movement_cost_map(dungeon_t *d);
 void place_monsters(dungeon_t *d);
+void sortMonsters(dungeon_t *d);
+int living_monsters(dungeon_t *d);
 
 #endif

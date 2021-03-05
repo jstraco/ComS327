@@ -790,7 +790,7 @@ void place_monsters(dungeon_t *d)
   }
 }
 
-int living_monster(dungeon_t *d){
+int living_monsters(dungeon_t *d){
   int count = 0;
   for (int i = 0; i < d->numMon; i++){
     count += d->monsters[i].alive;

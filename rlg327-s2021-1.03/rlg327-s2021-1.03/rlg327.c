@@ -2,6 +2,7 @@
 #include <string.h>
 #include <sys/time.h>
 #include <stdlib.h>
+ #include <unistd.h>
 
 #include "dungeon.h"
 #include "path.h"
@@ -212,7 +213,6 @@ int main(int argc, char *argv[])
     usleep(250000);
   }
 
-  printf("");
 
   if (do_save)
   {
