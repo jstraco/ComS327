@@ -1,9 +1,10 @@
 #include "move.h"
-
+#include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <assert.h>
-
+#include <ncurses.h>
+#include <curses.h>
 #include "dungeon.h"
 #include "heap.h"
 #include "move.h"
@@ -48,7 +49,8 @@ void do_moves(dungeon_t *d)
   pair_t next;
   character_t *c;
   event_t *e;
-
+  
+  initscr();
   /* Remove the PC when it is PC turn.  Replace on next call.  This allows *
    * use to completely uninit the heap when generating a new level without *
    * worrying about deleting the PC.                                       */
@@ -103,14 +105,15 @@ void do_moves(dungeon_t *d)
      * and recreated every time we leave and re-enter this function.    */
     e->c = NULL;
     event_delete(e);
-    pc_next_pos(d, next);
+    //pc_next_pos(d, next);
+    do_input(d, getch());
     next[dim_x] += c->position[dim_x];
     next[dim_y] += c->position[dim_y];
     if (mappair(next) <= ter_floor) {
       mappair(next) = ter_floor_hall;
       hardnesspair(next) = 0;
     }
-    move_character(d, c, next);
+    //move_character(d, c, next);
 
     dijkstra(d);
     dijkstra_tunnel(d);
@@ -157,4 +160,77 @@ uint32_t in_corner(dungeon_t *d, character_t *c)
                           c->position[dim_y] + 1) == ter_wall_immutable);
 
   return num_immutable > 1;
+}
+void do_input(dungeon_t *d, int ch){
+  pair_t dir;
+  switch(ch){
+    case 'q':
+    // do something to exit game
+    break;
+    case '7': 
+    case 'y':
+    dir[0] = -1;
+    dir[1] = -1;
+    move_pc(d, dir);
+    break;
+    case '8': 
+    case 'k':
+    dir[0] = -1;
+    dir[1] = 0;
+    move_pc(d, dir);
+    break;
+    case '9': 
+    case 'u':
+    dir[0] = -1;
+    dir[1] = 1;
+    move_pc(d, dir);
+    break;
+    case '3': 
+    case 'n':
+    dir[0] = 1;
+    dir[1] = 1;
+    move_pc(d, dir);
+    break;
+    case '2': 
+    case 'j':
+    dir[0] = 1;
+    dir[1] = 0;
+    move_pc(d, dir);
+    break;
+    case '1': 
+    case 'b':
+    dir[0] = 1;
+    dir[1] = -1;
+    move_pc(d, dir);
+    break;
+    case '4': 
+    case 'h':
+    dir[0] = 0;
+    dir[1] = -1;
+    move_pc(d, dir);
+    break;
+    case '6': 
+    case 'l':
+    dir[0] = 0;
+    dir[1] = 1;
+    move_pc(d, dir);
+    break;
+    case '<':
+    case '>':
+    //do_stairs(c) TODO
+    break;
+    case ' ':
+    case '5':
+    //nothing to do here, just doesn't move
+    break;
+    case 'm':
+    case KEY_UP: 
+    case KEY_DOWN:
+    //case 'escape': TODO
+    //do_monsterlist(ch) TODO
+    break;
+    default:
+    printf("not a valid input, turn skiped");
+  }
+
 }

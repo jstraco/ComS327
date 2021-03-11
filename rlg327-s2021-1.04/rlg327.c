@@ -3,7 +3,8 @@
 #include <sys/time.h>
 #include <stdlib.h>
 #include <unistd.h>
-
+#include <ncurses.h>
+#include <curses.h>
 #include "dungeon.h"
 #include "pc.h"
 #include "npc.h"
@@ -85,6 +86,12 @@ int main(int argc, char *argv[])
   char *load_file;
   char *pgm_file;
   uint32_t delay = 33000;
+
+  //setup for ncurses functions
+  initscr();
+  cbreak();
+  noecho();
+  keypad(stdscr, TRUE);
   
   /* Quiet a false positive from valgrind. */
   memset(&d, 0, sizeof (d));
@@ -235,7 +242,7 @@ int main(int argc, char *argv[])
   }
 
   render_dungeon(&d);
-
+  endwin();
   if (do_save) {
     if (do_save_seed) {
        /* 10 bytes for number, plus dot, extention and null terminator. */

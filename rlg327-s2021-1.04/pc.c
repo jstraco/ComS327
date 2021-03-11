@@ -1,5 +1,5 @@
 #include <stdlib.h>
-
+#include <stdio.h>
 #include "string.h"
 
 #include "dungeon.h"
@@ -167,6 +167,16 @@ uint32_t pc_next_pos(dungeon_t *d, pair_t dir)
     dir[dim_x] = dir[dim_y] = 0;
   }
 
+  return 0;
+}
+
+uint32_t move_pc(dungeon_t *d, pair_t dir){
+  if(d->map[dir[0]][dir[1]] == ter_wall || d->map[dir[0]][dir[1]] == ter_wall_immutable){
+    printf("There's a wall in the way!");
+  } else {
+    d->pc.position[dim_y] = d->pc.position[dim_y] + dir [0];
+    d->pc.position[dim_x] = d->pc.position[dim_x] + dir [1];
+  }
   return 0;
 }
 
