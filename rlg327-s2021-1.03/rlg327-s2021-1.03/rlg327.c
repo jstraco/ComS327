@@ -211,7 +211,7 @@ int main(int argc, char *argv[])
     }
     movePc(&d);
     render_dungeon(&d);
-    usleep(250000);
+    usleep(1000000);
   }
   free(d.monsters);
   

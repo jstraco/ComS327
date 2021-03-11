@@ -8,7 +8,7 @@ typedef enum dim 7,190
 } dim_t;11,238
 typedef int8_t pair_t[pair_t13,248
 
-dungeon.c,1745
+dungeon.c,1876
 #define DUMP_HARDNESS_IMAGES 17,285
 typedef struct corridor_path19,317
   heap_node_t *hn;hn21,348
@@ -36,34 +36,39 @@ static int empty_dungeon(581,16380
 static int place_rooms(603,16768
 static void place_stairs(647,17972
 static int make_rooms(671,18573
-void place_monsters(697,19143
-int living_monsters(794,21606
-void sortMonsters(802,21755
-void moveMonster(818,22117
-void moveSmart(844,22809
-void moveSmartTunnel(861,23539
-int gen_dungeon(880,24366
-void render_dungeon(894,24530
-void delete_dungeon(951,25845
-void init_dungeon(956,25902
-int write_dungeon_map(961,25959
-int write_rooms(976,26193
-uint16_t count_up_stairs(999,26667
-uint16_t count_down_stairs(1018,26930
-int write_stairs(1037,27197
-uint32_t calculate_dungeon_size(1075,27976
-int write_dungeon(1086,28446
-int read_dungeon_map(1158,29983
-int read_stairs(1187,30615
-int read_rooms(1212,31096
-int read_dungeon(1274,32856
-int read_pgm(1366,34731
-void render_hardness_map(1468,37195
-void render_movement_cost_map(1494,37726
-void render_distance_map(1524,38277
-void render_tunnel_distance_map(1572,39371
+void place_monsters(696,19138
+int is_smart(779,21017
+int is_telepathic(786,21101
+int is_tunnel(805,21333
+int is_erratic(812,21446
+int living_monsters(820,21529
+void sortMonsters(828,21678
+void moveMonster(844,22040
+void moveSmart(870,22741
+void moveSmartTunnel(887,23471
+void movePc(906,24298
+int gen_dungeon(926,24797
+void render_dungeon(940,24961
+void delete_dungeon(997,26276
+void init_dungeon(1002,26333
+int write_dungeon_map(1007,26390
+int write_rooms(1022,26624
+uint16_t count_up_stairs(1045,27098
+uint16_t count_down_stairs(1064,27361
+int write_stairs(1083,27628
+uint32_t calculate_dungeon_size(1121,28407
+int write_dungeon(1132,28877
+int read_dungeon_map(1204,30414
+int read_stairs(1233,31046
+int read_rooms(1258,31527
+int read_dungeon(1320,33287
+int read_pgm(1412,35162
+void render_hardness_map(1514,37626
+void render_movement_cost_map(1540,38157
+void render_distance_map(1570,38708
+void render_tunnel_distance_map(1618,39802
 
-dungeon.h,1921
+dungeon.h,1716
 #define DUNGEON_H2,18
 #define DUNGEON_X 7,74
 #define DUNGEON_Y 8,95
@@ -103,37 +108,30 @@ typedef struct pc44,876
   int room_num;49,948
 } pc_t;50,964
 typedef struct monster52,973
-  uint32_t type;54,998
-  uint8_t smart;55,1015
-  uint8_t telepath;56,1032
-  uint8_t tunnel;57,1052
-  uint8_t erratic;58,1070
-  pair_t position;59,1089
-  pair_t pc_pos;60,1108
-  uint8_t speed;61,1125
-  int room_num;62,1142
-  char symbol;63,1158
-  int alive;64,1173
-} monster_t;65,1186
-typedef struct characters67,1200
-  struct pc *pc;pc69,1228
-  struct monster *monster;monster70,1245
-  int is_alive;71,1272
-  pair_t position;72,1288
-  uint8_t speed;73,1307
-} character_t;74,1324
-typedef struct dungeon76,1340
-  uint32_t num_rooms;78,1365
-  room_t *rooms;rooms79,1387
-  terrain_type_t map[map80,1404
-  uint8_t hardness[hardness89,2057
-  uint8_t pc_distance[pc_distance90,2099
-  uint8_t pc_tunnel[pc_tunnel91,2144
-  struct characters *characters[characters92,2187
-  pc_t pc;93,2242
-  uint8_t numMon;94,2253
-  monster_t *monsters;monsters95,2271
-} dungeon_t;96,2294
+  uint8_t type;54,998
+  uint8_t smart;55,1014
+  uint8_t telepath;56,1031
+  uint8_t tunnel;57,1051
+  uint8_t erratic;58,1069
+  pair_t position;59,1088
+  pair_t pc_pos;60,1107
+  uint8_t speed;61,1124
+  int room_num;62,1141
+  char symbol;63,1157
+  int alive;64,1172
+} monster_t;65,1185
+typedef struct dungeon67,1199
+  uint32_t num_rooms;69,1224
+  room_t *rooms;rooms70,1246
+  terrain_type_t map[map71,1263
+  uint8_t hardness[hardness80,1916
+  uint8_t pc_distance[pc_distance81,1958
+  uint8_t pc_tunnel[pc_tunnel82,2003
+  struct characters *characters[characters83,2046
+  pc_t pc;84,2101
+  uint8_t numMon;85,2112
+  monster_t *monsters;monsters86,2130
+} dungeon_t;87,2153
 
 heap.c,1020
 struct heap_node 8,99
