@@ -50,7 +50,7 @@ void do_moves(dungeon_t *d)
   character_t *c;
   event_t *e;
   
-  initscr();
+
   /* Remove the PC when it is PC turn.  Replace on next call.  This allows *
    * use to completely uninit the heap when generating a new level without *
    * worrying about deleting the PC.                                       */
@@ -217,7 +217,10 @@ void do_input(dungeon_t *d, int ch){
     break;
     case '<':
     case '>':
-    //do_stairs(c) TODO
+    if(d->map[d->pc.position[dim_y]][d->pc.position[dim_x]] == ter_stairs_down 
+    || d->map[d->pc.position[dim_y]][d->pc.position[dim_x]] == ter_stairs_up){
+      gen_dungeon(d);
+    }
     break;
     case ' ':
     case '5':
@@ -232,5 +235,5 @@ void do_input(dungeon_t *d, int ch){
     default:
     printf("not a valid input, turn skiped");
   }
-
 }
+
