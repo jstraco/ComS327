@@ -4,7 +4,7 @@
 # include "heap.h"
 # include "dims.h"
 # include "character.h"
-
+#include <ncurses.h>
 #define DUNGEON_X              80
 #define DUNGEON_Y              21
 #define MIN_ROOMS              6
@@ -80,7 +80,7 @@ typedef struct dungeon {
 void init_dungeon(dungeon_t *d);
 void delete_dungeon(dungeon_t *d);
 int gen_dungeon(dungeon_t *d);
-void render_dungeon(dungeon_t *d);
+void render_dungeon(dungeon_t *d, WINDOW * win);
 int write_dungeon(dungeon_t *d, char *file);
 int read_dungeon(dungeon_t *d, char *file);
 int read_pgm(dungeon_t *d, char *pgm);

@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
   cbreak();
   noecho();
   keypad(stdscr, TRUE);
-  
+  WINDOW * win = newwin(21, 80, 1, 0); 
   /* Quiet a false positive from valgrind. */
   memset(&d, 0, sizeof (d));
   
@@ -232,16 +232,12 @@ int main(int argc, char *argv[])
   /* Ignoring PC position in saved dungeons.  Not a bug. */
   config_pc(&d);
   gen_monsters(&d);
-
   while (pc_is_alive(&d) && dungeon_has_npcs(&d)) {
-    render_dungeon(&d);
+    render_dungeon(&d, win);
     do_moves(&d);
-    if (delay) {
-      usleep(delay);
-    }
   }
 
-  render_dungeon(&d);
+  render_dungeon(&d, win);
   endwin();
   if (do_save) {
     if (do_save_seed) {

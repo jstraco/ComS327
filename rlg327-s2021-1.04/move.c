@@ -233,7 +233,7 @@ void do_input(dungeon_t *d, int ch){
     //do_monsterlist(ch) TODO
     break;
     default:
-    printf("not a valid input, turn skiped");
+    printf("not a valid input, turn skiped\n");
   }
 }
 

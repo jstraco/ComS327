@@ -172,7 +172,7 @@ uint32_t pc_next_pos(dungeon_t *d, pair_t dir)
 
 uint32_t move_pc(dungeon_t *d, pair_t dir){
   if(d->map[dir[0]][dir[1]] == ter_wall || d->map[dir[0]][dir[1]] == ter_wall_immutable){
-    printf("There's a wall in the way!");
+    printf("There's a wall in the way!\n");
   } else {
     d->pc.position[dim_y] = d->pc.position[dim_y] + dir [0];
     d->pc.position[dim_x] = d->pc.position[dim_x] + dir [1];
