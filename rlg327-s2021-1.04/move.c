@@ -163,64 +163,68 @@ uint32_t in_corner(dungeon_t *d, character_t *c)
 }
 void do_input(dungeon_t *d, character_t *c, int ch){
   pair_t dir;
-  dir[0] = -7;
+  dir[dim_y] = -7;
   switch(ch){
     case 'q':
     // do something to exit game
     break;
     case '7': 
     case 'y':
-    dir[0] = d->pc.position[dim_y] - 1;
-    dir[1] = d->pc.position[dim_x] - 1;
+    dir[dim_y] = c->position[dim_y] - 1;
+    dir[dim_x] = c->position[dim_x] - 1;
     // move_pc(d, dir);
     break;
     case '8': 
     case 'k':
-    dir[0] = d->pc.position[dim_y] - 1;
-    dir[1] = d->pc.position[dim_x];
+    dir[dim_y] = c->position[dim_y] - 1;
+    dir[dim_x] = c->position[dim_x];
     // move_pc(d, dir);
     break;
     case '9': 
     case 'u':
-    dir[0] = d->pc.position[dim_y] - 1;
-    dir[1] = d->pc.position[dim_x] + 1;
+    dir[dim_y] = c->position[dim_y] - 1;
+    dir[dim_x] = c->position[dim_x] + 1;
     // move_pc(d, dir);
     break;
     case '3': 
     case 'n':
-    dir[0] = d->pc.position[dim_y] + 1;
-    dir[1] = d->pc.position[dim_x] + 1;
+    dir[dim_y] = c->position[dim_y] + 1;
+    dir[dim_x] = c->position[dim_x] + 1;
     // move_pc(d, dir);
     break;
     case '2': 
     case 'j':
-    dir[0] = d->pc.position[dim_y] + 1;
-    dir[1] = d->pc.position[dim_x];
+    dir[dim_y] = c->position[dim_y] + 1;
+    dir[dim_x] = c->position[dim_x];
     // move_pc(d, dir);
     break;
     case '1': 
     case 'b':
-    dir[0] = d->pc.position[dim_y] + 1;
-    dir[1] = d->pc.position[dim_x] - 1;
+    dir[dim_y] = c->position[dim_y] + 1;
+    dir[dim_x] = c->position[dim_x] - 1;
     // move_pc(d, dir);
     break;
     case '4': 
     case 'h':
-    dir[0] = d->pc.position[dim_y];
-    dir[1] = d->pc.position[dim_x] - 1;
+    dir[dim_y] = c->position[dim_y];
+    dir[dim_x] = c->position[dim_x] - 1;
     // move_pc(d, dir);
     break;
     case '6': 
     case 'l':
-    dir[0] = d->pc.position[dim_y];
-    dir[1] = d->pc.position[dim_x] + 1;
+    dir[dim_y] = c->position[dim_y];
+    dir[dim_x] = c->position[dim_x] + 1;
     // move_pc(d, dir);
     break;
     case '<':
     case '>':
-    if(d->map[d->pc.position[dim_y]][d->pc.position[dim_x]] == ter_stairs_down 
-    || d->map[d->pc.position[dim_y]][d->pc.position[dim_x]] == ter_stairs_up){
+    if(d->map[c->position[dim_y]][c->position[dim_x]] == ter_stairs_down 
+    || d->map[c->position[dim_y]][c->position[dim_x]] == ter_stairs_up){
+      delete_dungeon(d);
+      init_dungeon(d);
       gen_dungeon(d);
+      config_pc(d);
+      gen_monsters(d);
     }
     break;
     case ' ':
@@ -236,11 +240,7 @@ void do_input(dungeon_t *d, character_t *c, int ch){
     default:
     printf("not a valid input, turn skiped\n");
   }
-  if(dir[0] != -7) {
-    if(d->map[dir[0]][dir[1]] == ter_wall || d->map[dir[0]][dir[1]] == ter_wall_immutable){
-    printf("\nThere's a wall in the way!\n");
-  } else {
-    move_character(d, &d->pc, dir);
-  }
+  if(dir[dim_y] != -7) {
+    move_pc(d, c, dir);
   }
 }
