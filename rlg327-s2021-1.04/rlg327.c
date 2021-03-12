@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
   cbreak();
   noecho();
   keypad(stdscr, TRUE);
-  WINDOW * win = newwin(22, 81, 1, 0); 
+  WINDOW * win = newwin(22, 81, 0, 0); 
   /* Quiet a false positive from valgrind. */
   memset(&d, 0, sizeof (d));
   
@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
   srand(seed);
 
   init_dungeon(&d);
-
+  
   if (do_load) {
     read_dungeon(&d, load_file);
   } else if (do_image) {

@@ -106,6 +106,7 @@ void do_moves(dungeon_t *d)
     e->c = NULL;
     event_delete(e);
     //pc_next_pos(d, next);
+    
     do_input(d, c, getch());
     // next[dim_x] += c->position[dim_x];
     // next[dim_y] += c->position[dim_y];
@@ -163,7 +164,6 @@ uint32_t in_corner(dungeon_t *d, character_t *c)
 }
 void do_input(dungeon_t *d, character_t *c, int ch){
   pair_t dir;
-  dir[dim_y] = -7;
   switch(ch){
     case 'q':
     // do something to exit game
@@ -172,49 +172,49 @@ void do_input(dungeon_t *d, character_t *c, int ch){
     case 'y':
     dir[dim_y] = c->position[dim_y] - 1;
     dir[dim_x] = c->position[dim_x] - 1;
-    // move_pc(d, dir);
+    move_pc(d, c, dir);
     break;
     case '8': 
     case 'k':
     dir[dim_y] = c->position[dim_y] - 1;
     dir[dim_x] = c->position[dim_x];
-    // move_pc(d, dir);
+    move_pc(d, c, dir);
     break;
     case '9': 
     case 'u':
     dir[dim_y] = c->position[dim_y] - 1;
     dir[dim_x] = c->position[dim_x] + 1;
-    // move_pc(d, dir);
+    move_pc(d, c, dir);
     break;
     case '3': 
     case 'n':
     dir[dim_y] = c->position[dim_y] + 1;
     dir[dim_x] = c->position[dim_x] + 1;
-    // move_pc(d, dir);
+    move_pc(d, c, dir);
     break;
     case '2': 
     case 'j':
     dir[dim_y] = c->position[dim_y] + 1;
     dir[dim_x] = c->position[dim_x];
-    // move_pc(d, dir);
+    move_pc(d, c, dir);
     break;
     case '1': 
     case 'b':
     dir[dim_y] = c->position[dim_y] + 1;
     dir[dim_x] = c->position[dim_x] - 1;
-    // move_pc(d, dir);
+    move_pc(d, c, dir);
     break;
     case '4': 
     case 'h':
     dir[dim_y] = c->position[dim_y];
     dir[dim_x] = c->position[dim_x] - 1;
-    // move_pc(d, dir);
+    move_pc(d, c, dir);
     break;
     case '6': 
     case 'l':
     dir[dim_y] = c->position[dim_y];
     dir[dim_x] = c->position[dim_x] + 1;
-    // move_pc(d, dir);
+    move_pc(d, c, dir);
     break;
     case '<':
     case '>':
@@ -237,10 +237,16 @@ void do_input(dungeon_t *d, character_t *c, int ch){
     //case 'escape': TODO
     //do_monsterlist(ch) TODO
     break;
-    default:
-    printf("not a valid input, turn skiped\n");
+    default: ;
+    WINDOW * win = newwin(1, 81, 23, 0);
+    wprintw(win, "not a valid input, turn skiped");
+    wrefresh(win);
+    break;
   }
-  if(dir[dim_y] != -7) {
-    move_pc(d, c, dir);
-  }
+}
+uint32_t do_error(){
+  WINDOW * win = newwin(1, 81, 23, 0);
+  wprintw(win, "There's a wall in the way!");
+  wrefresh(win);
+  return 0;
 }

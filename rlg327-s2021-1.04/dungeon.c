@@ -624,7 +624,7 @@ int gen_dungeon(dungeon_t *d)
 void render_dungeon(dungeon_t *d, WINDOW * win)
 {
   pair_t p;
-
+  wrefresh(stdscr);
   //putchar('\n');
   for (p[dim_y] = 0; p[dim_y] < DUNGEON_Y; p[dim_y]++) {
     for (p[dim_x] = 0; p[dim_x] < DUNGEON_X; p[dim_x]++) {
