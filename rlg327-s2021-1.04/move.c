@@ -166,52 +166,52 @@ void do_input(dungeon_t *d, character_t *c, int ch){
   pair_t dir;
   switch(ch){
     case 'q':
-    // do something to exit game
+    d->pc.alive = 0;
     break;
-    case '7': 
+    case 7 + '0': 
     case 'y':
     dir[dim_y] = c->position[dim_y] - 1;
     dir[dim_x] = c->position[dim_x] - 1;
     move_pc(d, c, dir);
     break;
-    case '8': 
+    case 8 + '0': 
     case 'k':
     dir[dim_y] = c->position[dim_y] - 1;
     dir[dim_x] = c->position[dim_x];
     move_pc(d, c, dir);
     break;
-    case '9': 
+    case 9 + '0': 
     case 'u':
     dir[dim_y] = c->position[dim_y] - 1;
     dir[dim_x] = c->position[dim_x] + 1;
     move_pc(d, c, dir);
     break;
-    case '3': 
+    case 3 + '0': 
     case 'n':
     dir[dim_y] = c->position[dim_y] + 1;
     dir[dim_x] = c->position[dim_x] + 1;
     move_pc(d, c, dir);
     break;
-    case '2': 
+    case 2 + '0': 
     case 'j':
     dir[dim_y] = c->position[dim_y] + 1;
     dir[dim_x] = c->position[dim_x];
     move_pc(d, c, dir);
     break;
-    case '1': 
+    case 1 + '0': 
     case 'b':
     dir[dim_y] = c->position[dim_y] + 1;
     dir[dim_x] = c->position[dim_x] - 1;
     move_pc(d, c, dir);
     break;
-    case '4': 
+    case 4 + '0': 
     case 'h':
     dir[dim_y] = c->position[dim_y];
     dir[dim_x] = c->position[dim_x] - 1;
     move_pc(d, c, dir);
     break;
-    case '6': 
-    case 'l':
+    case 6 + '0': 
+    case 'l': 
     dir[dim_y] = c->position[dim_y];
     dir[dim_x] = c->position[dim_x] + 1;
     move_pc(d, c, dir);
@@ -228,14 +228,11 @@ void do_input(dungeon_t *d, character_t *c, int ch){
     }
     break;
     case ' ':
-    case '5':
+    case 5 + '0':
     //nothing to do here, just doesn't move
     break;
     case 'm':
-    case KEY_UP: 
-    case KEY_DOWN:
-    //case 'escape': TODO
-    //do_monsterlist(ch) TODO
+    monster_list(d);
     break;
     default: ;
     WINDOW * win = newwin(1, 81, 23, 0);
@@ -249,4 +246,83 @@ uint32_t do_error(){
   wprintw(win, "There's a wall in the way!");
   wrefresh(win);
   return 0;
+}
+
+void monster_list(dungeon_t *d)
+{
+  pair_t p;
+  WINDOW *monWin = newwin(20, 81, 23, 0);
+  char **list = malloc(d->num_monsters * sizeof(char *));
+  int i = 0;
+  for (p[dim_y] = 0; p[dim_y] < DUNGEON_Y; p[dim_y]++)
+  {
+    for (p[dim_x] = 0; p[dim_x] < DUNGEON_X; p[dim_x]++)
+    {
+      if (charpair(p) && charpair(p)->symbol != '@')
+      {
+        list[i] = malloc(24 * sizeof(char));
+        char *yDirection = malloc(5 * sizeof(char));
+        int yDistance;
+        if (d->pc.position[dim_y] >= p[dim_y])
+        {
+          yDirection = "North";
+          yDistance = d->pc.position[dim_y] - p[dim_y];
+        }
+        else
+        {
+          yDirection = "South";
+          yDistance = p[dim_y] - d->pc.position[dim_y];
+        }
+        char *xDirection = malloc(4 * sizeof(char));
+        int xDistance;
+        if (d->pc.position[dim_x] >= p[dim_x])
+        {
+          xDirection = "West";
+          xDistance = d->pc.position[dim_x] - p[dim_x];
+        }
+        else
+        {
+          xDirection = "East";
+          xDistance = p[dim_x] - d->pc.position[dim_x];
+        }
+        sprintf(list[i], "%c, %d %s and %d %s", charpair(p)->symbol, yDistance, yDirection, xDistance, xDirection);
+        i++;
+      }
+    }
+  }
+  int listMax = 10;
+  if (i < d->num_monsters)
+  {
+    listMax = d->num_monsters;
+  }
+  i = 0;
+  while (i >= 0)
+  {
+    for (i = 0; i < listMax; i++)
+    {
+      wprintw(monWin, "%s\n", list[i]);
+    }
+    wrefresh(monWin);
+    int monCH = getch();
+    switch (monCH)
+    {
+    case KEY_DOWN:
+      if (i + listMax < listMax)
+      {
+        i++;
+      }
+      break;
+    case KEY_UP:
+      if (i < 0)
+      {
+        i--;
+      }
+      break;
+    default:
+      i = -1;
+      break;
+    }
+  }
+  delwin(monWin);
+  free(list);
 }
