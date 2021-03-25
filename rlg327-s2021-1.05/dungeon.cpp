@@ -670,6 +670,53 @@ void render_dungeon(dungeon_t *d)
   putchar('\n');
   putchar('\n');
 }
+/* 
+
+// nick, call this when you want to show the entire dungeon, not just what the player can see
+
+void render_dungeon_test(dungeon_t *d)      
+{
+  pair_t p;
+
+  putchar('\n');
+  for (p[dim_y] = 0; p[dim_y] < DUNGEON_Y; p[dim_y]++) {
+    for (p[dim_x] = 0; p[dim_x] < DUNGEON_X; p[dim_x]++) {
+      if (charpair(p)) {
+        putchar(charpair(p)->symbol);
+      } else {
+        switch (mappair(p)) {
+        case ter_wall:
+        case ter_wall_immutable:
+          putchar(' ');
+          break;
+        case ter_floor:
+        case ter_floor_room:
+          putchar('.');
+          break;
+        case ter_floor_hall:
+          putchar('#');
+          break;
+        case ter_debug:
+          putchar('*');
+          fprintf(stderr, "Debug character at %d, %d\n", p[dim_y], p[dim_x]);
+          break;
+        case ter_stairs_up:
+          putchar('<');
+          break;
+        case ter_stairs_down:
+          putchar('>');
+          break;
+        default:
+          break;
+        }
+      }
+    }
+    putchar('\n');
+  }
+  putchar('\n');
+  putchar('\n');
+}
+*/
 
 void delete_dungeon(dungeon_t *d)
 {
@@ -1270,4 +1317,19 @@ void new_dungeon(dungeon_t *d)
   d->character[d->pc.position[dim_y]][d->pc.position[dim_x]] = &d->pc;
 
   gen_monsters(d);
+}
+
+void pc_updateSeen(dungeon_t *d){
+  for(int y = d->pc.position[dim_y] - 2; y <= d->pc.position[dim_y] + 2; y++){
+    for(int x = d->pc.position[dim_x] - 2; x <= d->pc.position[dim_x] + 2; x++){
+      d->mapSeen[y][x] = d->map[y][x];
+    }
+  }
+}
+void pc_init_mapSeen(dungeon_t *d){
+for(int y = 0; y < DUNGEON_Y; y++){
+    for(int x = 0; x < DUNGEON_X; x++){
+      d->mapSeen[y][x] = ter_wall;
+    }
+  }
 }

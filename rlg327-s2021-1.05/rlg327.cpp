@@ -85,7 +85,6 @@ int main(int argc, char *argv[])
   char *save_file;
   char *load_file;
   char *pgm_file;
-  
   /* Quiet a false positive from valgrind. */
   memset(&d, 0, sizeof (d));
   
@@ -201,6 +200,7 @@ int main(int argc, char *argv[])
 
   io_init_terminal();
   init_dungeon(&d);
+  pc_init_mapSeen(&d);
 
   if (do_load) {
     read_dungeon(&d, load_file);

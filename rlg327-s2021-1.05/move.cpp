@@ -231,6 +231,7 @@ static void new_dungeon_level(dungeon_t *d, uint32_t dir)
   case '<':
   case '>':
     new_dungeon(d);
+    pc_init_mapSeen(d);
     break;
   default:
     break;

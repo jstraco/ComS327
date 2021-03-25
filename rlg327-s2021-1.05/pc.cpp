@@ -1,5 +1,7 @@
 #include <stdlib.h>
-
+#include <stdio.h>
+#include <ctype.h>
+#include <unistd.h>
 #include "string.h"
 
 #include "dungeon.hpp"
@@ -7,6 +9,9 @@
 #include "utils.hpp"
 #include "move.hpp"
 #include "path.hpp"
+
+#define DUNGEON_X              80
+#define DUNGEON_Y              21
 
 void pc_delete(pc_t *pc)
 {
@@ -162,3 +167,18 @@ uint32_t pc_in_room(dungeon_t *d, uint32_t room)
 
   return 0;
 }
+/*
+void pc_updateSeen(dungeon_t *d){
+  for(int y = d->pc.position[dim_y] - 2; y <= d->pc.position[dim_y] - 2; y++){
+    for(int x = d->pc.position[dim_x] - 2; x <= d->pc.position[dim_x] - 2; x++){
+      d->mapSeen[y][x] = d->map[y][x];
+    }
+  }
+}
+void pc_init_mapSeen(dungeon_t *d){
+for(int y = 0; y < DUNGEON_Y; y++){
+    for(int x = 0; x < DUNGEON_X; x++){
+      d->mapSeen[y][x] = ter_wall;
+    }
+  }
+} */

@@ -53,6 +53,7 @@ typedef class dungeon {
     uint32_t num_rooms;
     room_t *rooms;
     terrain_type_t map[DUNGEON_Y][DUNGEON_X];
+    terrain_type_t mapSeen[DUNGEON_Y][DUNGEON_X];
     /* Since hardness is usually not used, it would be expensive to pull it *
     * into cache every time we need a map cell, so we store it in a        *
     * parallel array, rather than using a structure to represent the       *
@@ -87,5 +88,8 @@ int gen_dungeon(dungeon_t *d);
 int write_dungeon(dungeon_t *d, char *file);
 int read_dungeon(dungeon_t *d, char *file);
 int read_pgm(dungeon_t *d, char *pgm);
+
+void pc_updateSeen(dungeon_t *d);
+void pc_init_mapSeen(dungeon_t *d);
 
 #endif
