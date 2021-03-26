@@ -267,9 +267,8 @@ void io_display(dungeon_t *d)
 
   refresh();
 }
-/*
 
-void io_display(dungeon_t *d)
+void io_display_dungeon(dungeon_t *d)
 {
   uint32_t y, x;
   character_t *c;
@@ -302,8 +301,8 @@ void io_display(dungeon_t *d)
           mvaddch(y + 1, x, '>');
           break;
         default:
- * Use zero as an error symbol, since it stands out somewhat, and it's *
-  * not otherwise used.                                                 
+ //* Use zero as an error symbol, since it stands out somewhat, and it's *
+ // * not otherwise used.                                                 
           mvaddch(y + 1, x, '0');
         }
       }
@@ -338,7 +337,6 @@ void io_display(dungeon_t *d)
   refresh();
 }
 
-*/
 
 void io_display_monster_list(dungeon_t *d)
 {
@@ -371,7 +369,7 @@ uint32_t io_teleport_pc(dungeon_t *d)
 
   dijkstra(d);
   dijkstra_tunnel(d);
-
+  io_display(d);
   return 0;
 }
 /* Adjectives to describe our monsters */
@@ -407,7 +405,123 @@ static const char *adjectives[] = {
   "Eine liebliche "  /* For our Deutch */
   /* And there's one special case (see below) */
 };
+void render_teleport_dungeon(dungeon_t *d, int destx, int desty){
+  int y, x;
+  character_t *c;
+  //pc_updateSeen(d);
+  clear();
+  for (y = 0; y < 21; y++) {
+    for (x = 0; x < 80; x++) {
+      if ( d->character[y][x] && ((!(y < d->pc.position[dim_y]-2) && !(y > d->pc.position[dim_y]+2)) 
+          && (!(x < d->pc.position[dim_x]-2) && !(x > d->pc.position[dim_x]+2))) ) {
+        mvaddch(y + 1, x, d->character[y][x]->symbol);
+      }
+      else if(x == destx && y == desty){
+	mvaddch(y+1,x, '*');
+      }
+      else {
+        switch (d->mapSeen[y][x]) {
+        case ter_wall:
+        case ter_wall_immutable:
+          mvaddch(y + 1, x, ' ');
+          break;
+        case ter_floor:
+        case ter_floor_room:
+          mvaddch(y + 1, x, '.');
+          break;
+        case ter_floor_hall:
+          mvaddch(y + 1, x, '#');
+          break;
+        case ter_debug:
+          mvaddch(y + 1, x, '*');
+          break;
+        case ter_stairs_up:
+          mvaddch(y + 1, x, '<');
+          break;
+        case ter_stairs_down:
+          mvaddch(y + 1, x, '>');
+          break;
+        default:
+ /* Use zero as an error symbol, since it stands out somewhat, and it's *
+  * not otherwise used.                                                 */
+          mvaddch(y + 1, x, '0');
+        }
+      }
+    }
+  }
 
+  mvprintw(23, 1, "PC position is (%2d,%2d).",
+           d->pc.position[dim_x], d->pc.position[dim_y]);
+  mvprintw(22, 1, "%d known %s.", d->num_monsters,
+           d->num_monsters > 1 ? "monsters" : "monster");
+  mvprintw(22, 30, "Nearest visible monster: ");
+  if ((c = io_nearest_visible_monster(d))) {
+    attron(COLOR_PAIR(COLOR_RED));
+    mvprintw(22, 55, "%c at %d %c by %d %c.",
+             c->symbol,
+             abs(c->position[dim_y] - d->pc.position[dim_y]),
+             ((c->position[dim_y] - d->pc.position[dim_y]) <= 0 ?
+              'N' : 'S'),
+             abs(c->position[dim_x] - d->pc.position[dim_x]),
+             ((c->position[dim_x] - d->pc.position[dim_x]) <= 0 ?
+              'W' : 'E'));
+    attroff(COLOR_PAIR(COLOR_RED));
+  } else {
+    attron(COLOR_PAIR(COLOR_BLUE));
+    mvprintw(22, 55, "NONE.");
+    attroff(COLOR_PAIR(COLOR_BLUE));
+  }
+           
+
+  io_print_message_queue(0, 0);
+
+  refresh();
+}
+void teleport_mode(dungeon_t *d){
+  pair_t dest;
+  dest[dim_y] = d->pc.position[dim_y];
+  dest[dim_x] = d->pc.position[dim_x];
+  while(1){
+    switch (getch()) {
+    case KEY_UP:
+      dest[dim_y] = dest[dim_y]-1;
+      render_teleport_dungeon(d,dest[dim_x],dest[dim_y]);
+      break;
+    case KEY_DOWN:
+      dest[dim_y] = dest[dim_y]+1;
+      render_teleport_dungeon(d,dest[dim_x],dest[dim_y]);
+      break;
+    case KEY_LEFT:
+      dest[dim_x] = dest[dim_x]-1;
+      render_teleport_dungeon(d,dest[dim_x],dest[dim_y]);
+      break;
+    case KEY_RIGHT:
+      dest[dim_x] = dest[dim_x]+1;
+      render_teleport_dungeon(d,dest[dim_x],dest[dim_y]);
+      break;
+    case 'r':
+      io_teleport_pc(d);
+      return;
+      break;
+    case 'g':
+      d->character[d->pc.position[dim_y]][d->pc.position[dim_x]] = NULL;
+      d->character[dest[dim_y]][dest[dim_x]] = &d->pc;
+
+      d->pc.position[dim_y] = dest[dim_y];
+      d->pc.position[dim_x] = dest[dim_x];
+
+      if (mappair(dest) < ter_floor) {
+	mappair(dest) = ter_floor;
+      }
+
+      dijkstra(d);
+      dijkstra_tunnel(d);
+      io_display(d);
+      return;
+      break;
+    }
+  }
+}
 static void io_scroll_monster_list(char (*s)[40], uint32_t count)
 {
   uint32_t offset;
@@ -598,13 +712,17 @@ void io_handle_input(dungeon_t *d)
       io_display(d);
       fail_code = 1;
       break;
+    case 'F':
+    case 'f':
+      io_display_dungeon(d);
+      break;
     case 'L':
       fail_code = 1;
       break;
     case 'g':
       /* Teleport the PC to a random place in the dungeon.              */
-      io_teleport_pc(d);
-      fail_code = 0;
+      teleport_mode(d);
+      //fail_code = 0;
       break;
     case 'm':
       io_list_monsters(d);
