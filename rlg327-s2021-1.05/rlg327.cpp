@@ -79,7 +79,6 @@ void usage(char *name)
 
 int main(int argc, char *argv[]) {
   dungeon_t d;
-  std::cout << "cool" << std::endl;
   io_read_npc(&d);
 }
 

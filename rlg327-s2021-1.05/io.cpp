@@ -771,6 +771,7 @@ void io_read_npc(dungeon_t *d) {
   std::fstream f;
   std::string current;
   std::string current_line;
+  //std::string name, desc, color, speed, abil, hp, rrty, dam, symb, fin;
   f.open("monster_desc.txt");
   if(f.is_open()) {
     while(!f.eof()) {
@@ -778,50 +779,60 @@ void io_read_npc(dungeon_t *d) {
       if(current == "BEGIN") {
         f >> current;
         if(current == "MONSTER") {  
-          f >> current;
           while(current != "END") {
+            f >> current;
             if(current == "NAME") {
               std::getline(f, current_line);
+              //name = current_line;
               std::cout << current_line << std::endl;
             }      
-            if(current == "DESC") {
-              do {
+            else if(current == "DESC") {
+              std::getline(f, current_line);
+              std::getline(f, current_line);
+              while(current_line != "."){
+                std::cout <<current_line << std::endl;
+                //desc = current_line;
                 std::getline(f, current_line);
-                std::cout << current_line << std::endl;
-              } while(current_line != ".");
-            }      
-            if(current == "COLOR") {
-              std::getline(f, current_line);
-              std::cout << current_line << std::endl;
-            }
-            if(current == "SPEED") {
-              std::getline(f, current_line);
-              std::cout << current_line << std::endl;
-            }
-            if(current == "ABIL") {
-              std::getline(f, current_line);
-              std::cout << current_line << std::endl;
-            }      
-            if(current == "HP") {
-              std::getline(f, current_line);
-              std::cout << current_line << std::endl;
-            }    
-            if(current == "DAM") {
-              std::getline(f, current_line);
-              std::cout << current_line << std::endl;
-            }     
-            if(current == "SYMB") {
-              std::getline(f, current_line);
-              while(1) {
-                std::cout << current_line << std::endl;
               }
-              std::cout << current_line << std::endl;
             }      
-            if(current == "RRTY") {
+            else if(current == "COLOR") {
               std::getline(f, current_line);
               std::cout << current_line << std::endl;
+              //color = current_line;
             }
-          }   
+            else if(current == "SPEED") {
+              std::getline(f, current_line);
+              std::cout << current_line << std::endl;
+              //speed = current_line;
+            }
+            else if(current == "ABIL") {
+              std::getline(f, current_line);
+              std::cout << current_line << std::endl;
+              //abil = current_line;
+            }      
+            else if(current == "HP") {
+              std::getline(f, current_line);
+              std::cout << current_line << std::endl;
+              //hp = current_line;
+            }    
+            else if(current == "DAM") {
+              std::getline(f, current_line);
+              std::cout << current_line << std::endl;
+              //dam = current_line;
+            }     
+            else if(current == "SYMB") {
+              std::getline(f, current_line);
+              std::cout << current_line << std::endl;
+              //symb = current_line;
+            }      
+            else if(current == "RRTY") {
+              std::getline(f, current_line);
+              std::cout << current_line << std::endl;
+              //rrty = current_line;
+            }
+          }
+
+          std::cout << std::endl;
         }
       } 
     }
