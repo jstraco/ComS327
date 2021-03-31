@@ -3,6 +3,9 @@
 #include <sys/time.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fstream>
+#include <iostream>
+#include <string>
 
 #include "dungeon.hpp"
 #include "pc.hpp"
@@ -74,7 +77,13 @@ void usage(char *name)
   exit(-1);
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv[]) {
+  dungeon_t d;
+  std::cout << "cool" << std::endl;
+  io_read_npc(&d);
+}
+
+int irrelivant_main(int argc, char *argv[])
 {
   dungeon_t d;
   time_t seed;

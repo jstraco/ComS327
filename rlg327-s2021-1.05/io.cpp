@@ -2,6 +2,9 @@
 #include <ncurses.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <fstream>
+#include <iostream>
+#include <string>
 
 #include "io.hpp"
 #include "move.hpp"
@@ -9,7 +12,6 @@
 #include "pc.hpp"
 #include "utils.hpp"
 #include "dungeon.hpp"
-
 /* Same ugly hack we did in path.c */
 static dungeon_t *dungeon;
 
@@ -763,4 +765,65 @@ void io_handle_input(dungeon_t *d)
       fail_code = 1;
     }
   } while (fail_code);
+}
+
+void io_read_npc(dungeon_t *d) {
+  std::fstream f;
+  std::string current;
+  std::string current_line;
+  f.open("monster_desc.txt");
+  if(f.is_open()) {
+    while(!f.eof()) {
+      f >> current;
+      if(current == "BEGIN") {
+        f >> current;
+        if(current == "MONSTER") {  
+          f >> current;
+          while(current != "END") {
+            if(current == "NAME") {
+              std::getline(f, current_line);
+              std::cout << current_line << std::endl;
+            }      
+            if(current == "DESC") {
+              do {
+                std::getline(f, current_line);
+                std::cout << current_line << std::endl;
+              } while(current_line != ".");
+            }      
+            if(current == "COLOR") {
+              std::getline(f, current_line);
+              std::cout << current_line << std::endl;
+            }
+            if(current == "SPEED") {
+              std::getline(f, current_line);
+              std::cout << current_line << std::endl;
+            }
+            if(current == "ABIL") {
+              std::getline(f, current_line);
+              std::cout << current_line << std::endl;
+            }      
+            if(current == "HP") {
+              std::getline(f, current_line);
+              std::cout << current_line << std::endl;
+            }    
+            if(current == "DAM") {
+              std::getline(f, current_line);
+              std::cout << current_line << std::endl;
+            }     
+            if(current == "SYMB") {
+              std::getline(f, current_line);
+              while(1) {
+                std::cout << current_line << std::endl;
+              }
+              std::cout << current_line << std::endl;
+            }      
+            if(current == "RRTY") {
+              std::getline(f, current_line);
+              std::cout << current_line << std::endl;
+            }
+          }   
+        }
+      } 
+    }
+  }
 }
