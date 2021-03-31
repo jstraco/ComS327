@@ -28,7 +28,6 @@ quake before her malevolent majesty.
 SYMB p
 COLOR BLACK
 ABIL SMART PASS
-DAM 30+5d9
 HP 2999+1d1001
 SPEED 10+10d2
 RRTY 20

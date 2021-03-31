@@ -771,68 +771,111 @@ void io_read_npc(dungeon_t *d) {
   std::fstream f;
   std::string current;
   std::string current_line;
-  //std::string name, desc, color, speed, abil, hp, rrty, dam, symb, fin;
   f.open("monster_desc.txt");
   if(f.is_open()) {
     while(!f.eof()) {
       f >> current;
       if(current == "BEGIN") {
         f >> current;
-        if(current == "MONSTER") {  
-          while(current != "END") {
+        if(current == "MONSTER") {
+          int tracker[9] = {0,0,0,0,0,0,0,0,0};
+          int pass = 1;
+          int valid = 1;
+          std::string name = "", desc = "", color = "", speed = "", abil = "", hp = "", rrty = "", dam = "", symb = "", fin = "";
+          while(valid) {
             f >> current;
+            if(current == "END") {
+              break;
+            }
             if(current == "NAME") {
+              tracker[0]++;
               std::getline(f, current_line);
-              //name = current_line;
-              std::cout << current_line << std::endl;
+              name = current_line;
+              name.erase(0, 1);
+              //  std::cout << current_line << std::endl;
             }      
             else if(current == "DESC") {
+              tracker[1]++;
               std::getline(f, current_line);
               std::getline(f, current_line);
+              desc = "";
               while(current_line != "."){
-                std::cout <<current_line << std::endl;
-                //desc = current_line;
+                //  std::cout <<current_line << std::endl;
+                desc += current_line + "\n";
                 std::getline(f, current_line);
               }
+              desc.pop_back();
             }      
             else if(current == "COLOR") {
+              tracker[2]++;
               std::getline(f, current_line);
-              std::cout << current_line << std::endl;
-              //color = current_line;
+              //  std::cout << current_line << std::endl;
+              color = current_line;
+              color.erase(0, 1);
             }
             else if(current == "SPEED") {
+              tracker[3]++;
               std::getline(f, current_line);
-              std::cout << current_line << std::endl;
-              //speed = current_line;
+              //  std::cout << current_line << std::endl;
+              speed = current_line;
+              speed.erase(0, 1);
             }
             else if(current == "ABIL") {
+              tracker[4]++;
               std::getline(f, current_line);
-              std::cout << current_line << std::endl;
-              //abil = current_line;
+              //  std::cout << current_line << std::endl;
+              abil = current_line;
+              abil.erase(0, 1);
             }      
             else if(current == "HP") {
+              tracker[5]++;
               std::getline(f, current_line);
-              std::cout << current_line << std::endl;
-              //hp = current_line;
+              //  std::cout << current_line << std::endl;
+              hp = current_line;
+              hp.erase(0, 1);
             }    
             else if(current == "DAM") {
+              tracker[6]++;
               std::getline(f, current_line);
-              std::cout << current_line << std::endl;
-              //dam = current_line;
+              //  std::cout << current_line << std::endl;
+              dam = current_line;
+              dam.erase(0, 1);
             }     
             else if(current == "SYMB") {
+              tracker[7]++;
               std::getline(f, current_line);
-              std::cout << current_line << std::endl;
-              //symb = current_line;
+              //  std::cout << current_line << std::endl;
+              symb = current_line;
+              symb.erase(0, 1);
             }      
-            else if(current == "RRTY") {
+            else if(current == "RRTY") {  
+              tracker[8]++;
               std::getline(f, current_line);
-              std::cout << current_line << std::endl;
-              //rrty = current_line;
+              //  std::cout << current_line << std::endl;
+              rrty = current_line;
+              rrty.erase(0, 1);
+            }
+            else {
+              std::cout << current << std::endl;
+              valid = 0;}
+          }
+          for(int i = 0; i < 9; i++) {
+            if(tracker[i] != 1) {
+              pass = 0;
+              break;
             }
           }
-
-          std::cout << std::endl;
+          if(valid && pass) {
+            std::cout << name << std::endl;
+            std::cout << desc << std::endl;
+            std::cout << color << std::endl;
+            std::cout << speed << std::endl;
+            std::cout << abil << std::endl;
+            std::cout << hp << std::endl;
+            std::cout << dam << std::endl;
+            std::cout << symb << std::endl;
+            std::cout << rrty << std::endl << std::endl;
+          }
         }
       } 
     }
