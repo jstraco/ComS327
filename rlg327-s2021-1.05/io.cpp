@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <cstdlib>
 
 #include "io.hpp"
 #include "move.hpp"
@@ -767,6 +768,60 @@ void io_handle_input(dungeon_t *d)
   } while (fail_code);
 }
 
+int dice_roll(std::string dice){
+  // parses the dice string of x+xdx and rolls it
+  //std::cout << "dice is" << std::endl;
+  //std::cout << dice << std::endl;
+  
+  //parses the dice
+  int modifier = atoi(dice.substr(0, dice.find("+")).c_str());
+  int num_of_dice = atoi(dice.substr(dice.find("+"), dice.find("d")).c_str());
+  int dice_num = atoi(dice.substr(dice.find("d")+1).c_str());
+  int roll = 0;
+  int min = 1;
+  //std::cout << "modifier is" << std::endl;
+  //std::cout << modifier << std::endl;
+  //std::cout << "num of dice is" << std::endl;
+  //std::cout << num_of_dice << std::endl;
+  //std::cout << "dice num is" << std::endl;
+  //std::cout << dice_num << std::endl;
+  
+  //rolls the dice
+  srand(time(0));
+  for(int i = 0; i < num_of_dice; i++){
+    roll += rand() % (dice_num - min + 1) + min;
+    roll += modifier;
+  }
+  return roll;
+}
+int get_color(std::string color){
+  if(color == "BLACK"){
+    return 0;
+  }
+  else if(color == "RED"){
+    return 1;
+  }
+  else if(color == "GREEN"){
+    return 2;
+  }
+  else if(color == "YELLOW"){
+    return 3;
+  }
+  else if(color == "BLUE"){
+    return 4;
+  }
+  else if(color == "MAGENTA"){
+    return 5;
+  }
+  else if(color == "CYAN"){
+    return 6;
+  }
+  else if(color == "WHITE"){
+    return 7;
+  }
+  
+}
+
 void io_read_npc(dungeon_t *d) {
   std::fstream f;
   std::string current;
@@ -875,6 +930,7 @@ void io_read_npc(dungeon_t *d) {
             std::cout << dam << std::endl;
             std::cout << symb << std::endl;
             std::cout << rrty << std::endl << std::endl;
+	    //std::cout << dice_roll("0+37d2000")<< std::endl;
           }
         }
       } 
