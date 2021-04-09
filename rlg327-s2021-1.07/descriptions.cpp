@@ -132,15 +132,6 @@ static inline void eat_blankspace(std::ifstream &f)
   }  
 }
 
-void populate_objects (dungeon *d) {
-  std::vector<object> &obj = d->object;
-  std::vector<object_description> &o = d->object_descriptions;
-  std::vector<object_description>::iterator oi;
-  for(oi = o.begin(); oi != o.end(); oi++) {
-    obj.push_back(generate_item(*oi));
-  }
-}
-
 object generate_item(object_description &objDesc) {
   object o;
   o.set(objDesc.get_name(), objDesc.get_description(), objDesc.get_type(), objDesc.get_color(),
@@ -149,21 +140,31 @@ object generate_item(object_description &objDesc) {
     return o;
 }
 
-void populate_monsters (dungeon *d) {
-  std::vector<monster> &mon = d->monster;
-  std::vector<monster_description> &m = d->monster_descriptions;
-  std::vector<monster_description>::iterator mi;
-  for(mi = m.begin(); mi != m.end(); mi++) {
-    mon.push_back(generate_item(*mi));
+void populate_objects (dungeon *d) {
+  std::vector<object> &obj = d->objects;
+  std::vector<object_description> &o = d->object_descriptions;
+  std::vector<object_description>::iterator oi;
+  for(oi = o.begin(); oi != o.end(); oi++) {
+    obj.push_back(generate_item(*oi));
   }
 }
 
-object generate_monster(monster_description &monDesc) {
+monster generate_monster(monster_description &monsDesc) {
   monster m;
   m.set(monsDesc.get_name(), monsDesc.get_description(), monsDesc.get_symbol(), monsDesc.get_color(),
-    monsDesc.get_speed().roll(), monsDesc.get_abilities(), monsDesc.get_hitpoints().roll(), monsDesc.get_damage(), monsDesc.get_rrty());
-    return o;
+    monsDesc.get_speed().roll(), monsDesc.get_abilities(), monsDesc.get_hitpoints().roll(), monsDesc.get_damage(), monsDesc.get_rarity());
+    return m;
 }
+
+void populate_monsters (dungeon *d) {
+  std::vector<monster> &mon = d->monsters;
+  std::vector<monster_description> &m = d->monster_descriptions;
+  std::vector<monster_description>::iterator mi;
+  for(mi = m.begin(); mi != m.end(); mi++) {
+    mon.push_back(generate_monster(*mi));
+  }
+}
+
 
 static uint32_t parse_name(std::ifstream &f,
                            std::string *lookahead,

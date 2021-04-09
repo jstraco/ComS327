@@ -21,10 +21,10 @@ class object{
   uint32_t hit, dodge, defence, weight, speed, attribute, value;
  public:
   object() : name(),    description(), type(objtype_no_type),
-                         color(0),  hit(),         damage(),
-                         dodge(),   defence(),     weight(),
-                         speed(),   attribute(),   value(),
-                         artifact(false), rarity(0)
+                         color(0),  damage(),      artifact(false),
+                         rarity(0), hit(),         dodge(),
+                         defence(),     weight(),
+                         speed(),   attribute(),   value()
   {
   }
   void set(const std::string &name,

@@ -2,6 +2,9 @@
 # define NPC_H
 
 # include <stdint.h>
+# include <string>
+# include <vector>
+# include "dice.h"
 
 # include "dims.h"
 # include "character.h"
@@ -66,8 +69,8 @@ class monster {
   uint32_t rarity, speed, hitpoints;
  public:
   monster() : name(),       description(), symbol(0),   color(0),
-                          abilities(0), speed(),       hitpoints(), damage(),
-                          rarity(0)
+                          abilities(0),  damage(),
+                          rarity(0), speed(),       hitpoints()
   {
   }
   void set(const std::string &name,
