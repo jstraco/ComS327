@@ -15,6 +15,7 @@
 #include "dice.h"
 #include "character.h"
 #include "utils.h"
+#include "item.h"
 
 #define MONSTER_FILE_SEMANTIC          "RLG327 MONSTER DESCRIPTION"
 #define MONSTER_FILE_VERSION           1U
@@ -131,6 +132,35 @@ static inline void eat_blankspace(std::ifstream &f)
   }  
 }
 
+void populate_objects (dungeon *d) {
+  std::vector<object> &obj = d->object;
+  std::vector<object_description> &o = d->object_descriptions;
+  std::vector<object_description>::iterator oi;
+  for(oi = o.begin(); oi != o.end(); oi++) {
+    obj.push_back(generate_item(*oi));
+  }
+}
+
+object generate_item(object_description &objDesc) {
+  object o;
+  o.set(objDesc.get_name(), objDesc.get_description(), objDesc.get_type(), objDesc.get_color()
+    objDesc.get_hit().roll, objDesc.get_damage(), objDesc.get_dodge(), objDesc.get_defence(), objDesc.get_weight(),
+    objDesc.get_speed(), objDesc.get_attribute(), objDesc.get_value(), objDesc.get_art(), objDesc.get_rrty()
+}
+
+/*
+uint32_t print_descriptions(dungeon_t *d)
+{
+  std::vector<monster_description> &m = d->monster_descriptions;
+  std::vector<monster_description>::iterator mi;
+  std::vector<object_description> &o = d->object_descriptions;
+  std::vector<object_description>::iterator oi;
+
+  for (mi = m.begin(); mi != m.end(); mi++) {
+    std::cout << *mi << std::endl;
+  }
+  */
+
 static uint32_t parse_name(std::ifstream &f,
                            std::string *lookahead,
                            std::string *name)
@@ -204,7 +234,6 @@ static uint32_t parse_integer(std::ifstream &f,
 
   return 0;
 }
-
 static uint32_t parse_monster_rrty(std::ifstream &f,
                                    std::string *lookahead,
                                    uint32_t *rarity)
