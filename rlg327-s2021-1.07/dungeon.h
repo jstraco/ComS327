@@ -7,6 +7,7 @@
 # include "dims.h"
 # include "character.h"
 # include "descriptions.h"
+# include "item.h"
 
 #define DUNGEON_X              80
 #define DUNGEON_Y              21
@@ -93,6 +94,7 @@ class dungeon {
   uint32_t quit;
   std::vector<monster_description> monster_descriptions;
   std::vector<object_description> object_descriptions;
+  std::vector<object> object;
 };
 
 void init_dungeon(dungeon *d);

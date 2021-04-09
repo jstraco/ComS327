@@ -144,7 +144,7 @@ void populate_objects (dungeon *d) {
 object generate_item(object_description &objDesc) {
   object o;
   o.set(objDesc.get_name(), objDesc.get_description(), objDesc.get_type(), objDesc.get_color()
-    objDesc.get_hit().roll, objDesc.get_damage(), objDesc.get_dodge(), objDesc.get_defence(), objDesc.get_weight(),
+    objdDesc.get_hit().roll(), objDesc.get_damage(), objDesc.get_dodge(), objDesc.get_defence(), objDesc.get_weight(),
     objDesc.get_speed(), objDesc.get_attribute(), objDesc.get_value(), objDesc.get_art(), objDesc.get_rrty()
 }
 
