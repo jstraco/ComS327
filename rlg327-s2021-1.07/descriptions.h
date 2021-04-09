@@ -62,7 +62,16 @@ class monster_description {
            const dice &damage,
            const uint32_t rarity);
   std::ostream &print(std::ostream &o);
-  char get_symbol() { return symbol; }
+  inline const std::string &get_name() const { return name; }
+  inline const std::string &get_description() const { return description; }
+  inline const char &get_symbol() { return symbol; }
+  inline const std::vector<uint32_t> &get_color() { return color; }
+  inline const dice &get_speed() { return speed; }
+  inline const uint32_t &get_abilities() { return abilities; }
+  inline const dice &get_hitpoints() { return hitpoints; }
+  inline const dice &get_damage() { return damage; }
+  inline const uint32_t &get_rarity() { return rarity; }
+
 };
 
 class object_description {
@@ -110,6 +119,8 @@ class object_description {
   inline const dice &get_speed() const { return speed; }
   inline const dice &get_attribute() const { return attribute; }
   inline const dice &get_value() const { return value; }
+  inline const bool &get_art() const { return artifact; }
+  inline const uint32_t &get_rrty() const { return rarity; }
 };
 
 std::ostream &operator<<(std::ostream &o, monster_description &m);

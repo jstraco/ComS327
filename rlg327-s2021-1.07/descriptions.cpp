@@ -143,23 +143,27 @@ void populate_objects (dungeon *d) {
 
 object generate_item(object_description &objDesc) {
   object o;
-  o.set(objDesc.get_name(), objDesc.get_description(), objDesc.get_type(), objDesc.get_color()
-    objdDesc.get_hit().roll(), objDesc.get_damage(), objDesc.get_dodge(), objDesc.get_defence(), objDesc.get_weight(),
-    objDesc.get_speed(), objDesc.get_attribute(), objDesc.get_value(), objDesc.get_art(), objDesc.get_rrty()
+  o.set(objDesc.get_name(), objDesc.get_description(), objDesc.get_type(), objDesc.get_color(),
+    objDesc.get_hit().roll(), objDesc.get_damage(), objDesc.get_dodge().roll(), objDesc.get_defence().roll(), objDesc.get_weight().roll(),
+    objDesc.get_speed().roll(), objDesc.get_attribute().roll(), objDesc.get_value().roll(), objDesc.get_art(), objDesc.get_rrty());
+    return o;
 }
 
-/*
-uint32_t print_descriptions(dungeon_t *d)
-{
+void populate_monsters (dungeon *d) {
+  std::vector<monster> &mon = d->monster;
   std::vector<monster_description> &m = d->monster_descriptions;
   std::vector<monster_description>::iterator mi;
-  std::vector<object_description> &o = d->object_descriptions;
-  std::vector<object_description>::iterator oi;
-
-  for (mi = m.begin(); mi != m.end(); mi++) {
-    std::cout << *mi << std::endl;
+  for(mi = m.begin(); mi != m.end(); mi++) {
+    mon.push_back(generate_item(*mi));
   }
-  */
+}
+
+object generate_monster(monster_description &monDesc) {
+  monster m;
+  m.set(monsDesc.get_name(), monsDesc.get_description(), monsDesc.get_symbol(), monsDesc.get_color(),
+    monsDesc.get_speed().roll(), monsDesc.get_abilities(), monsDesc.get_hitpoints().roll(), monsDesc.get_damage(), monsDesc.get_rrty());
+    return o;
+}
 
 static uint32_t parse_name(std::ifstream &f,
                            std::string *lookahead,

@@ -56,4 +56,31 @@ void npc_delete(npc *n);
 void npc_next_pos(dungeon *d, npc *c, pair_t next);
 uint32_t dungeon_has_npcs(dungeon *d);
 
+class monster {
+ private:
+  std::string name, description;
+  char symbol;
+  std::vector<uint32_t> color;
+  uint32_t abilities;
+  dice damage;
+  uint32_t rarity, speed, hitpoints;
+ public:
+  monster() : name(),       description(), symbol(0),   color(0),
+                          abilities(0), speed(),       hitpoints(), damage(),
+                          rarity(0)
+  {
+  }
+  void set(const std::string &name,
+           const std::string &description,
+           const char symbol,
+           const std::vector<uint32_t> &color,
+           const uint32_t &speed,
+           const uint32_t abilities,
+           const uint32_t &hitpoints,
+           const dice &damage,
+           const uint32_t rarity);
+  std::ostream &print(std::ostream &o);
+  char get_symbol() { return symbol; }
+};
+
 #endif

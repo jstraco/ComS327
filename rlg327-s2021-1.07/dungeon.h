@@ -95,6 +95,7 @@ class dungeon {
   std::vector<monster_description> monster_descriptions;
   std::vector<object_description> object_descriptions;
   std::vector<object> object;
+  std::vector<monster> monster;
 };
 
 void init_dungeon(dungeon *d);

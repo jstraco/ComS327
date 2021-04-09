@@ -6,7 +6,6 @@
 # include <vector>
 # include <string>
 # include "dice.h"
-# include "descriptions.cpp"
 # include "descriptions.h"
 
 
@@ -32,14 +31,14 @@ class object{
            const std::string &description,
            const object_type_t type,
            const uint32_t color,
-           const dice &hit,
+           const uint32_t &hit,
            const dice &damage,
-           const dice &dodge,
-           const dice &defence,
-           const dice &weight,
-           const dice &speed,
-           const dice &attrubute,
-           const dice &value,
+           const uint32_t &dodge,
+           const uint32_t &defence,
+           const uint32_t &weight,
+           const uint32_t &speed,
+           const uint32_t &attrubute,
+           const uint32_t &value,
            const bool artifact,
            const uint32_t rarity);
   std::ostream &print(std::ostream &o);
