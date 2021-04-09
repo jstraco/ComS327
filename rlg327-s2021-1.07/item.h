@@ -7,7 +7,7 @@
 # include <string>
 # include "dice.h"
 # include "descriptions.h"
-
+typedef struct dungeon dungeon_t;
 
 
 class object{
@@ -31,16 +31,16 @@ class object{
            const std::string &description,
            const object_type_t type,
            const uint32_t color,
-           const uint32_t &hit,
            const dice &damage,
-           const uint32_t &dodge,
-           const uint32_t &defence,
-           const uint32_t &weight,
-           const uint32_t &speed,
-           const uint32_t &attrubute,
-           const uint32_t &value,
            const bool artifact,
-           const uint32_t rarity);
+           const uint32_t rarity,
+           const uint32_t hit,
+           const uint32_t dodge,
+           const uint32_t defence,
+           const uint32_t weight,
+           const uint32_t speed,
+           const uint32_t attrubute,
+           const uint32_t value);
   std::ostream &print(std::ostream &o);
   /* Need all these accessors because otherwise there is a *
    * circular dependancy that is difficult to get around.  */
@@ -57,5 +57,7 @@ class object{
   inline const uint32_t &get_attribute() const { return attribute; }
   inline const uint32_t &get_value() const { return value; }
 };
+std::ostream &operator<<(std::ostream &o, object &obj);
+
 
 #endif

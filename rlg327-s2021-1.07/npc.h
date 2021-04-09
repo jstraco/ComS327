@@ -77,9 +77,9 @@ class monster {
            const std::string &description,
            const char symbol,
            const std::vector<uint32_t> &color,
-           const uint32_t &speed,
+           const uint32_t speed,
            const uint32_t abilities,
-           const uint32_t &hitpoints,
+           const uint32_t hitpoints,
            const dice &damage,
            const uint32_t rarity);
   std::ostream &print(std::ostream &o);

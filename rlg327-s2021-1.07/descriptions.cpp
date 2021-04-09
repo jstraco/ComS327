@@ -8,7 +8,7 @@
 #include <vector>
 #include <sstream>
 #include <cstdlib>
-
+# include <string>
 #include "descriptions.h"
 #include "dungeon.h"
 #include "npc.h"
@@ -134,9 +134,9 @@ static inline void eat_blankspace(std::ifstream &f)
 
 object generate_item(object_description &objDesc) {
   object o;
-  o.set(objDesc.get_name(), objDesc.get_description(), objDesc.get_type(), objDesc.get_color(),
-    objDesc.get_hit().roll(), objDesc.get_damage(), objDesc.get_dodge().roll(), objDesc.get_defence().roll(), objDesc.get_weight().roll(),
-    objDesc.get_speed().roll(), objDesc.get_attribute().roll(), objDesc.get_value().roll(), objDesc.get_art(), objDesc.get_rrty());
+  o.set(objDesc.get_name(), objDesc.get_description(), objDesc.get_type(), objDesc.get_color(), objDesc.get_damage(), objDesc.get_art(), objDesc.get_rrty(),
+    objDesc.get_hit().roll(), objDesc.get_dodge().roll(), objDesc.get_defence().roll(), objDesc.get_weight().roll(),
+    objDesc.get_speed().roll(), objDesc.get_attribute().roll(), objDesc.get_value().roll());
     return o;
 }
 
