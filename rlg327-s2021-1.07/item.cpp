@@ -15,4 +15,3 @@
 #include "dice.h"
 #include "character.h"
 #include "utils.h"
-

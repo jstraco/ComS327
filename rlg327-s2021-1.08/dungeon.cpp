@@ -685,6 +685,14 @@ void init_dungeon(dungeon *d)
   heap_init(&d->events, compare_events, event_delete);
   memset(d->character_map, 0, sizeof (d->character_map));
   memset(d->objmap, 0, sizeof (d->objmap));
+
+  for(int i = 0; i < INVENTORY_SIZE; i++){
+    d->inventory[i] = NULL; 
+  }
+  for(int i = 0; i < EQUIPMENT_SIZE; i++){
+    d->eqiupment[i] = NULL; 
+  }
+  
 }
 
 int write_dungeon_map(dungeon *d, FILE *f)

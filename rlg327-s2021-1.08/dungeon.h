@@ -23,6 +23,8 @@
 #define NPC_MAX_SPEED          20
 #define MAX_MONSTERS           15
 #define MAX_OBJECTS            15
+#define INVENTORY_SIZE         10
+#define EQUIPMENT_SIZE         12
 #define SAVE_DIR               ".rlg327"
 #define DUNGEON_SAVE_FILE      "dungeon"
 #define DUNGEON_SAVE_SEMANTIC  "RLG327-" TERM
@@ -100,6 +102,8 @@ class dungeon {
   uint32_t quit;
   std::vector<monster_description> monster_descriptions;
   std::vector<object_description> object_descriptions;
+  object *inventory[INVENTORY_SIZE];
+  object *eqiupment[EQUIPMENT_SIZE];
 };
 
 void init_dungeon(dungeon *d);
