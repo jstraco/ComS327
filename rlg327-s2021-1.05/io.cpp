@@ -819,14 +819,17 @@ int get_color(std::string color){
   else if(color == "WHITE"){
     return 7;
   }
-  
+  else{
+    return -1;
+  }
 }
 
 void io_read_npc(dungeon_t *d) {
   std::fstream f;
   std::string current;
   std::string current_line;
-  f.open("monster_desc.txt");
+  std::string home = getenv("HOME");
+  f.open(home + "/.rlg327/monster_desc.txt");
   if(f.is_open()) {
     while(!f.eof()) {
       f >> current;
