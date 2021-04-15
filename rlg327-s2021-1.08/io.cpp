@@ -1067,33 +1067,42 @@ const char * io_equipment_item_name(dungeon *d, int item){
 }
 
 void io_list_inv(dungeon *d){
-
+  clear();
   mvprintw(3, 5, "Your inventory:");
   for(int i = 0; i < INVENTORY_SIZE; i++){
-    mvprintw(i + 4, 5, "%d: ", i ,io_inv_item_name(d, i));
+    mvprintw(i + 4, 5, "%d: ", i);
+    mvprintw(i + 4, 8, io_inv_item_name(d, i));
   }
-  refresh();
 }
 
 void io_list_equipment(dungeon *d){
+  clear();
   mvprintw(3, 5, "Your equipment:");
   for(int i = 0; i < EQUIPMENT_SIZE; i++){
-    mvprintw(i + 4, 5, io_equipment_item_name(d, i));
+    mvprintw(i + 4, 5, "%d: ", i);
+    mvprintw(i + 4, 8, io_equipment_item_name(d, i));
   }
-  refresh();
 }
 
 void io_inspect_item(dungeon *d){
-
+  io_list_inv(d);
+  mvprintw(15, 5,"Enter the number of item you would like to inspect");
+  /*char * temp = d->inventory[getch()];
+*/
 }
 
 void io_delete_item(dungeon *d){
   io_list_inv(d);
-  mvprintw(15, 5, " %-60s ","Enter the number of item you would like to remove");
+  mvprintw(15, 5,"Enter the number of item you would like to remove");
+  d->inventory[getch()] = NULL;
 }
 
 void io_drop_item(dungeon *d){
-
+  io_list_inv(d);
+  mvprintw(15, 5,"Enter the number of item you would like to drop");
+  int key = getch();
+  d->objmap[d->PC->position[dim_y]][d->PC->position[dim_x]] = d->inventory[key];
+  d->inventory[key] = NULL;
 }
 
 void io_unequip_item(dungeon *d){
