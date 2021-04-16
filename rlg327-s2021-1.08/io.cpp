@@ -1140,6 +1140,7 @@ void io_drop_item(dungeon *d){
   io_display(d);
 }
 
+//
 void io_unequip_item(dungeon *d){
   clear();
   if(io_inv_room(d) + 1){
