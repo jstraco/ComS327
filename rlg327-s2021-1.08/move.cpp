@@ -57,11 +57,10 @@ void do_combat(dungeon *d, character *atk, character *def)
   attack = atk->damage->roll();
   if (atk == d->PC)
   {
-    attack += 1000;
 
     //player attack monster
     dice die;
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < EQUIPMENT_SIZE; i++)
     {
       if (d->eqiupment[i] != NULL && d->eqiupment[i]->get_damage_sides())
       {

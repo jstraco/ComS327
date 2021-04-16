@@ -833,7 +833,7 @@ static const char *adjectives[] = {
     "A kawaii ",      /* For our otaku */
     "Hao ke ai de ",  /* And for our Chinese */
     "Eine liebliche " /* For our Deutch */
-    /* And there's one special case (see below) */
+                      /* And there's one special case (see below) */
 };
 
 static void io_scroll_monster_list(char (*s)[60], uint32_t count)
@@ -1236,7 +1236,7 @@ void io_inspect_item(dungeon *d)
     mvprintw(i + 4, 8, io_inv_item_name(d, i));
   }
   mvprintw(15, 5, "Enter the number of item you would like to inspect");
-  
+
   char c = getch();
   switch (c)
   {
@@ -1280,7 +1280,8 @@ void io_inspect_item(dungeon *d)
 }
 
 //WORKS
-void io_delete_item(dungeon *d) {
+void io_delete_item(dungeon *d)
+{
   mvprintw(3, 5, "Your inventory:");
   for (int i = 0; i < INVENTORY_SIZE; i++)
   {
@@ -1349,14 +1350,207 @@ void io_equip_item(dungeon *d)
     mvprintw(i + 4, 5, "%d: ", i);
     mvprintw(i + 4, 8, io_inv_item_name(d, i));
   }
+  mvprintw(15, 5, "Enter the number of item you would like to equip");
+
+  char c = getch();
+  object *temp;
+  int newstuff;
+  switch (c)
+  {
+  case '0':
+    newstuff = 0;
+    break;
+  case '1':
+    newstuff = 1;
+    break;
+  case '2':
+    newstuff = 2;
+    break;
+  case '3':
+    newstuff = 3;
+    break;
+  case '4':
+    newstuff = 4;
+    break;
+  case '5':
+    newstuff = 5;
+    break;
+  case '6':
+    newstuff = 6;
+    break;
+  case '7':
+    newstuff = 7;
+    break;
+  case '8':
+    newstuff = 8;
+    break;
+  case '9':
+    newstuff = 9;
+    break;
+  default:
+    mvprintw(15, 5, "error wrong button pressed");
+    break;
+  }
+  if (d->inventory[newstuff]->get_type() == objtype_WEAPON)
+  {
+    if (d->eqiupment[newstuff] == NULL)
+    {
+      d->eqiupment[0] = d->inventory[newstuff];
+      d->inventory[newstuff] = NULL;
+    }
+    else
+    {
+      temp = d->inventory[newstuff];
+      d->inventory[newstuff] = d->eqiupment[0];
+      d->eqiupment[0] = temp;
+    }
+  }
+  else if (d->inventory[newstuff]->get_type() == objtype_OFFHAND)
+  {
+    if (d->eqiupment[1] == NULL)
+    {
+      d->eqiupment[1] = d->inventory[newstuff];
+      d->inventory[newstuff] = NULL;
+    }
+    else
+    {
+      temp = d->inventory[newstuff];
+      d->inventory[newstuff] = d->eqiupment[1];
+      d->eqiupment[1] = temp;
+    }
+  }
+  else if (d->inventory[newstuff]->get_type() == objtype_RANGED)
+  {
+    if (d->eqiupment[2] == NULL)
+    {
+      d->eqiupment[2] = d->inventory[newstuff];
+      d->inventory[newstuff] = NULL;
+    }
+    else
+    {
+      temp = d->inventory[newstuff];
+      d->inventory[newstuff] = d->eqiupment[2];
+      d->eqiupment[2] = temp;
+    }
+  }
+  else if (d->inventory[newstuff]->get_type() == objtype_ARMOR)
+  {
+    if (d->eqiupment[3] == NULL)
+    {
+      d->eqiupment[3] = d->inventory[newstuff];
+      d->inventory[newstuff] = NULL;
+    }
+    else
+    {
+      temp = d->inventory[newstuff];
+      d->inventory[newstuff] = d->eqiupment[3];
+      d->eqiupment[3] = temp;
+    }
+  }
+  else if (d->inventory[newstuff]->get_type() == objtype_HELMET)
+  {
+    if (d->eqiupment[4] == NULL)
+    {
+      d->eqiupment[4] = d->inventory[newstuff];
+      d->inventory[newstuff] = NULL;
+    }
+    else
+    {
+      temp = d->inventory[newstuff];
+      d->inventory[newstuff] = d->eqiupment[4];
+      d->eqiupment[4] = temp;
+    }
+  }
+  else if (d->inventory[newstuff]->get_type() == objtype_CLOAK)
+  {
+    if (d->eqiupment[5] == NULL)
+    {
+      d->eqiupment[5] = d->inventory[newstuff];
+      d->inventory[newstuff] = NULL;
+    }
+    else
+    {
+      temp = d->inventory[newstuff];
+      d->inventory[newstuff] = d->eqiupment[5];
+      d->eqiupment[5] = temp;
+    }
+  }
+  else if (d->inventory[newstuff]->get_type() == objtype_GLOVES)
+  {
+    if (d->eqiupment[6] == NULL)
+    {
+      d->eqiupment[6] = d->inventory[newstuff];
+      d->inventory[newstuff] = NULL;
+    }
+    else
+    {
+      temp = d->inventory[newstuff];
+      d->inventory[newstuff] = d->eqiupment[6];
+      d->eqiupment[6] = temp;
+    }
+  }
+  else if (d->inventory[newstuff]->get_type() == objtype_BOOTS)
+  {
+    if (d->eqiupment[7] == NULL)
+    {
+      d->eqiupment[7] = d->inventory[newstuff];
+      d->inventory[newstuff] = NULL;
+    }
+    else
+    {
+      temp = d->inventory[newstuff];
+      d->inventory[newstuff] = d->eqiupment[7];
+      d->eqiupment[7] = temp;
+    }
+  }
+  else if (d->inventory[newstuff]->get_type() == objtype_AMULET)
+  {
+    if (d->eqiupment[8] == NULL)
+    {
+      d->eqiupment[8] = d->inventory[newstuff];
+      d->inventory[newstuff] = NULL;
+    }
+    else
+    {
+      temp = d->inventory[newstuff];
+      d->inventory[newstuff] = d->eqiupment[8];
+      d->eqiupment[8] = temp;
+    }
+  }
+  else if (d->inventory[newstuff]->get_type() == objtype_LIGHT)
+  {
+    if (d->eqiupment[9] == NULL)
+    {
+      d->eqiupment[9] = d->inventory[newstuff];
+      d->inventory[newstuff] = NULL;
+    }
+    else
+    {
+      temp = d->inventory[newstuff];
+      d->inventory[newstuff] = d->eqiupment[9];
+      d->eqiupment[9] = temp;
+    }
+  }
+  else if (d->inventory[newstuff]->get_type() == objtype_RING)
+  {
+    if (d->eqiupment[10] == NULL)
+    {
+      d->eqiupment[10] = d->inventory[newstuff];
+      d->inventory[newstuff] = NULL;
+    }
+    else if (d->eqiupment[11] == NULL)
+    {
+      d->eqiupment[11] = d->inventory[newstuff];
+      d->inventory[newstuff] = NULL;
+    }
+    else
+    {
+      temp = d->inventory[newstuff];
+      d->inventory[newstuff] = d->eqiupment[10];
+      d->eqiupment[10] = temp;
+    }
+  }
   refresh();
-  getch();
-  io_display(d);
-  mvprintw(17, 5, "Enter the letter of the item you would like to unequip");
-  refresh();
-  int slot = getch() - 97;
-  d->inventory[io_inv_room(d)] = d->eqiupment[slot];
-  d->eqiupment[slot] = NULL;
   io_display(d);
 }
 
