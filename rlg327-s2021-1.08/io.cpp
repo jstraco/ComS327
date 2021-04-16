@@ -1107,7 +1107,42 @@ void io_inspect_item(dungeon *d){
   }
   mvprintw(15, 5,"Enter the number of item you would like to inspect");
   refresh();
-  // char * temp = d->inventory[getch()];
+  switch (getch())
+  {
+  case '0':
+  mvprintw(15,6, (d->inventory[0]->get_description()));
+    break;
+  case '1':
+  mvprintw(15,6, (d->inventory[1]->get_description()));
+    break;
+  case '2':
+  mvprintw(15,6, (d->inventory[2]->get_description()));
+    break;
+  case '3':
+  mvprintw(15,6, (d->inventory[3]->get_description()));
+    break;
+  case '4':
+  mvprintw(15,6, (d->inventory[4]->get_description()));
+    break;
+  case '5':
+  mvprintw(15,6, (d->inventory[5]->get_description()));
+    break;
+  case '6':
+  mvprintw(15,6, (d->inventory[6]->get_description()));
+    break;
+  case '7':
+  mvprintw(15,6, (d->inventory[7]->get_description()));
+    break;
+  case '8':
+  mvprintw(15,6, (d->inventory[8]->get_description()));
+    break;
+  case '9':
+  mvprintw(15,6, (d->inventory[9]->get_description()));
+    break;
+  default:
+mvprintw(15,6, "error wrong button pressed");
+    break;
+  }
 }
 
 //WORKS
@@ -1277,7 +1312,7 @@ void io_look_monster(dungeon *d){
         clear();
         mvprintw(0, 0, "Monster name: ");
         mvprintw(0, 15, character_get_name(d->character_map[dest[dim_y]][dest[dim_x]]));
-        mvprintw(1, 2, "MONST DESC HERE");  // ADD IT TO PRINT MONSTER DESCRIPTION HERE ------------------------------------------------
+        mvprintw(1, 2, ((npc *) d->character_map[dest[dim_y]][dest[dim_x]])->description); 
         refresh();
         getch();
       } else {
