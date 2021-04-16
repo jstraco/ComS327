@@ -504,58 +504,58 @@ event *new_event(new_event27,701
 event *update_event(update_event44,995
 void event_delete(52,1137
 
-io.cpp,1580
+io.cpp,1618
 static dungeon *thedungeon;thedungeon17,288
-typedef struct io_message 19,317
-  char msg[msg22,498
-  struct io_message *next;next23,514
-} io_message_t;24,541
-static io_message_t *io_head,io_head26,558
-static io_message_t *io_head, *io_tail;io_tail26,558
-void io_init_terminal(28,599
-void io_reset_terminal(45,1084
-void io_queue_message(57,1244
-static void io_print_message_queue(83,1651
-void io_display_tunnel(103,2127
-void io_display_distance(121,2535
-static char hardness_to_char[hardness_to_char139,2936
-void io_display_hardness(142,3038
-static void io_redisplay_visible_monsters(162,3867
-static int compare_monster_distance(277,9492
-static character *io_nearest_visible_monster(io_nearest_visible_monster288,9926
-void io_display(320,10662
-static void io_redisplay_non_terrain(427,14494
-void io_display_no_fog(462,15871
-void io_display_monster_list(537,18204
-uint32_t io_teleport_pc(546,18400
-static const char *adjectives[adjectives704,22145
-static void io_scroll_monster_list(737,22927
-static bool is_vowel(766,23380
-static void io_list_monsters_display(772,23559
-static void io_list_monsters(838,26176
-void io_handle_input(868,26941
-const char * io_inv_item_name(1057,32215
-const char * io_equipment_item_name(1065,32382
-void io_list_inv(1074,32562
-void io_list_equipment(1087,32822
-void io_inspect_item(1101,33264
-void io_delete_item(1149,34457
-void io_drop_item(1163,34816
-void io_unequip_item(1179,35275
-void io_equip_item(1202,36024
-int io_inv_room(1207,36068
-int io_pickup_item(1217,36223
-void io_look_monster(1227,36570
+typedef struct io_message19,317
+  char msg[msg23,498
+  struct io_message *next;next24,514
+} io_message_t;25,541
+static io_message_t *io_head,io_head27,558
+static io_message_t *io_head, *io_tail;io_tail27,558
+void io_init_terminal(29,599
+void io_reset_terminal(46,1084
+void io_queue_message(59,1246
+static void io_print_message_queue(89,1658
+void io_display_tunnel(111,2140
+void io_display_distance(136,2584
+static char hardness_to_char[hardness_to_char161,3021
+void io_display_hardness(164,3125
+static void io_redisplay_visible_monsters(184,3852
+static int compare_monster_distance(318,9850
+static character *io_nearest_visible_monster(io_nearest_visible_monster329,10282
+void io_display(366,11033
+static void io_redisplay_non_terrain(490,15115
+void io_display_no_fog(534,16590
+void io_display_monster_list(618,18954
+uint32_t io_teleport_pc(627,19150
+static const char *adjectives[adjectives806,22997
+static void io_scroll_monster_list(839,23836
+static bool is_vowel(872,24310
+static void io_list_monsters_display(878,24489
+static void io_list_monsters(946,27070
+void io_handle_input(979,27844
+const char *io_inv_item_name(io_inv_item_name1174,33144
+const char *io_equipment_item_name(io_equipment_item_name1186,33320
+void io_list_inv(1199,33510
+void io_list_equipment(1214,33775
+void io_inspect_item(1229,34219
+void io_delete_item(1283,35504
+void io_drop_item(1297,35860
+void io_unequip_item(1315,36325
+void io_equip_item(1343,37092
+int io_inv_room(1364,37575
+int io_pickup_item(1377,37741
+void io_look_monster(1391,38099
 
 move.cpp,244
 void do_combat(20,323
-void move_character(377,15245
-void do_moves(398,15821
-void dir_nearest_wall(463,17853
-uint32_t against_wall(475,18264
-uint32_t in_corner(487,18748
-static void new_dungeon_level(505,19372
-uint32_t move_pc(521,19662
+void move_character(458,16642
+void do_moves(483,17226
+void dir_nearest_wall(558,19291
+uint32_t against_wall(572,19706
+uint32_t in_corner(584,20174
+static void new_dungeon_level(602,20782
+uint32_t move_pc(618,21073
 
 npc.cpp,1541
 static uint32_t max_monster_cells(15,279

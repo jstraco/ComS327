@@ -63,14 +63,13 @@ void do_combat(dungeon *d, character *atk, character *def)
     dice die;
     for (int i = 0; i < 10; i++)
     {
-      if (d->inventory[i] == NULL)
+      if (d->eqiupment[i] != NULL && d->eqiupment[i]->get_damage_sides())
       {
-        continue;
+        die.set_base(d->eqiupment[i]->get_damage_base());
+        die.set_sides(d->eqiupment[i]->get_damage_sides());
+        die.set_number(d->eqiupment[i]->get_damage_number());
+        attack += die.roll();
       }
-      die.set_base(d->inventory[i]->get_damage_base());
-      die.set_sides(d->inventory[i]->get_damage_sides());
-      die.set_number(d->inventory[i]->get_damage_number());
-      attack += die.roll();
     }
     def->hp -= attack;
     clear();
@@ -103,10 +102,10 @@ void do_combat(dungeon *d, character *atk, character *def)
         case 1:
           next[dim_y] = def->position[dim_y] - 1;
           next[dim_x] = def->position[dim_x] - 1;
-          // if (d->map[next[dim_y]][next[dim_x]] == ter_wall_immutable || d->map[next[dim_y]][next[dim_x]] == ter_wall)
-          // {
-          //   continue;
-          // }
+          if (d->map[next[dim_y]][next[dim_x]] == ter_wall_immutable || d->map[next[dim_y]][next[dim_x]] == ter_wall)
+          {
+            continue;
+          }
           if (!charpair(next))
           {
             d->character_map[def->position[dim_y]][def->position[dim_x]] = NULL;
@@ -138,10 +137,10 @@ void do_combat(dungeon *d, character *atk, character *def)
           next[dim_x] = def->position[dim_x];
           next[dim_y] = def->position[dim_y] - 1;
           next[dim_x] = def->position[dim_x] - 1;
-          // if (d->map[next[dim_y]][next[dim_x]] == ter_wall_immutable || d->map[next[dim_y]][next[dim_x]] == ter_wall)
-          // {
-          //   continue;
-          // }
+          if (d->map[next[dim_y]][next[dim_x]] == ter_wall_immutable || d->map[next[dim_y]][next[dim_x]] == ter_wall)
+          {
+            continue;
+          }
           if (!charpair(next))
           {
             d->character_map[def->position[dim_y]][def->position[dim_x]] = NULL;
@@ -173,10 +172,10 @@ void do_combat(dungeon *d, character *atk, character *def)
           next[dim_x] = def->position[dim_x] + 1;
           next[dim_y] = def->position[dim_y] - 1;
           next[dim_x] = def->position[dim_x] - 1;
-          // if (d->map[next[dim_y]][next[dim_x]] == ter_wall_immutable || d->map[next[dim_y]][next[dim_x]] == ter_wall)
-          // {
-          //   continue;
-          // }
+          if (d->map[next[dim_y]][next[dim_x]] == ter_wall_immutable || d->map[next[dim_y]][next[dim_x]] == ter_wall)
+          {
+            continue;
+          }
           if (!charpair(next))
           {
             d->character_map[def->position[dim_y]][def->position[dim_x]] = NULL;
@@ -208,10 +207,10 @@ void do_combat(dungeon *d, character *atk, character *def)
           next[dim_x] = def->position[dim_x] - 1;
           next[dim_y] = def->position[dim_y] - 1;
           next[dim_x] = def->position[dim_x] - 1;
-          // if (d->map[next[dim_y]][next[dim_x]] == ter_wall_immutable || d->map[next[dim_y]][next[dim_x]] == ter_wall)
-          // {
-          //   continue;
-          // }
+          if (d->map[next[dim_y]][next[dim_x]] == ter_wall_immutable || d->map[next[dim_y]][next[dim_x]] == ter_wall)
+          {
+            continue;
+          }
           if (!charpair(next))
           {
             d->character_map[def->position[dim_y]][def->position[dim_x]] = NULL;
@@ -243,10 +242,10 @@ void do_combat(dungeon *d, character *atk, character *def)
           next[dim_x] = def->position[dim_x] + 1;
           next[dim_y] = def->position[dim_y] - 1;
           next[dim_x] = def->position[dim_x] - 1;
-          // if (d->map[next[dim_y]][next[dim_x]] == ter_wall_immutable || d->map[next[dim_y]][next[dim_x]] == ter_wall)
-          // {
-          //   continue;
-          // }
+          if (d->map[next[dim_y]][next[dim_x]] == ter_wall_immutable || d->map[next[dim_y]][next[dim_x]] == ter_wall)
+          {
+            continue;
+          }
           if (!charpair(next))
           {
             d->character_map[def->position[dim_y]][def->position[dim_x]] = NULL;
@@ -278,10 +277,10 @@ void do_combat(dungeon *d, character *atk, character *def)
           next[dim_x] = def->position[dim_x] - 1;
           next[dim_y] = def->position[dim_y] - 1;
           next[dim_x] = def->position[dim_x] - 1;
-          // if (d->map[next[dim_y]][next[dim_x]] == ter_wall_immutable || d->map[next[dim_y]][next[dim_x]] == ter_wall)
-          // {
-          //   continue;
-          // }
+          if (d->map[next[dim_y]][next[dim_x]] == ter_wall_immutable || d->map[next[dim_y]][next[dim_x]] == ter_wall)
+          {
+            continue;
+          }
           if (!charpair(next))
           {
             d->character_map[def->position[dim_y]][def->position[dim_x]] = NULL;
@@ -313,10 +312,10 @@ void do_combat(dungeon *d, character *atk, character *def)
           next[dim_x] = def->position[dim_x];
           next[dim_y] = def->position[dim_y] - 1;
           next[dim_x] = def->position[dim_x] - 1;
-          // if (d->map[next[dim_y]][next[dim_x]] == ter_wall_immutable || d->map[next[dim_y]][next[dim_x]] == ter_wall)
-          // {
-          //   continue;
-          // }
+          if (d->map[next[dim_y]][next[dim_x]] == ter_wall_immutable || d->map[next[dim_y]][next[dim_x]] == ter_wall)
+          {
+            continue;
+          }
           if (!charpair(next))
           {
             d->character_map[def->position[dim_y]][def->position[dim_x]] = NULL;
@@ -348,10 +347,10 @@ void do_combat(dungeon *d, character *atk, character *def)
           next[dim_x] = def->position[dim_x] + 1;
           next[dim_y] = def->position[dim_y] - 1;
           next[dim_x] = def->position[dim_x] - 1;
-          // if (d->map[next[dim_y]][next[dim_x]] == ter_wall_immutable || d->map[next[dim_y]][next[dim_x]] == ter_wall)
-          // {
-          //   continue;
-          // }
+          if (d->map[next[dim_y]][next[dim_x]] == ter_wall_immutable || d->map[next[dim_y]][next[dim_x]] == ter_wall)
+          {
+            continue;
+          }
           if (!charpair(next))
           {
             d->character_map[def->position[dim_y]][def->position[dim_x]] = NULL;
