@@ -1097,7 +1097,7 @@ void io_list_equipment(dungeon *d){
   io_display(d);
   
 }
-//needs work
+//needs work                                       DO THIS
 void io_inspect_item(dungeon *d){
   clear();
   mvprintw(3, 5, "Your inventory:");
@@ -1140,7 +1140,7 @@ void io_drop_item(dungeon *d){
   io_display(d);
 }
 
-//
+// test this
 void io_unequip_item(dungeon *d){
   clear();
   if(io_inv_room(d) + 1){
@@ -1163,6 +1163,7 @@ void io_unequip_item(dungeon *d){
   }
 }
 
+//                                         DO THIS
 void io_equip_item(dungeon *d){
 
 }
@@ -1198,7 +1199,7 @@ void io_look_monster(dungeon *d){
   dest[dim_y] = d->PC->position[dim_y];
   dest[dim_x] = d->PC->position[dim_x];
 
-  mvaddch(dest[dim_y], dest[dim_x], '*');
+  mvaddch(dest[dim_y] + 1, dest[dim_x], '*');
   refresh();
 
   do{       
@@ -1272,27 +1273,25 @@ void io_look_monster(dungeon *d){
       }
       break;
     case 't':
-      if(d->character_map[dest[dim_y]+1][dest[dim_x]+1]){
+      if(d->character_map[dest[dim_y]][dest[dim_x]]){
         clear();
         mvprintw(0, 0, "Monster name: ");
         mvprintw(0, 15, character_get_name(d->character_map[dest[dim_y]][dest[dim_x]]));
+        mvprintw(1, 2, "MONST DESC HERE");  // ADD IT TO PRINT MONSTER DESCRIPTION HERE
         refresh();
         getch();
       } else {
-        clear();
-        mvprintw(0, 0, "debug: ");
-        refresh();
-        getch();
       }
       break;
     }
 
   io_display(d);
-  mvaddch(dest[dim_y], dest[dim_x], '*');
+  mvaddch(dest[dim_y] + 1, dest[dim_x], '*');
   refresh();
 
   }while(c != 27);
   
   io_display(d);
+  refresh();
 }
 
