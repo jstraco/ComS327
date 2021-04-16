@@ -1013,6 +1013,10 @@ void io_handle_input(dungeon *d)
       io_inspect_item(d);
       fail_code = 1;
       break;
+    case ',':
+      io_pickup_item(d);
+      fail_code = 1;
+      break;
     case 'q':
       /* Demonstrate use of the message queue.  You can use this for *
        * printf()-style debugging (though gdb is probably a better   *
@@ -1066,6 +1070,7 @@ const char * io_equipment_item_name(dungeon *d, int item){
   }
 }
 
+//WORKS
 void io_list_inv(dungeon *d){
   clear();
   mvprintw(3, 5, "Your inventory:");
@@ -1073,40 +1078,88 @@ void io_list_inv(dungeon *d){
     mvprintw(i + 4, 5, "%d: ", i);
     mvprintw(i + 4, 8, io_inv_item_name(d, i));
   }
+  refresh();
+  getch();
+  io_display(d);
 }
 
+//WORKS
 void io_list_equipment(dungeon *d){
   clear();
+  const char *j = "abcdefghijkl";
   mvprintw(3, 5, "Your equipment:");
   for(int i = 0; i < EQUIPMENT_SIZE; i++){
-    mvprintw(i + 4, 5, "%d: ", i);
+    mvprintw(i + 4, 5, "%c: ", j[i]);
     mvprintw(i + 4, 8, io_equipment_item_name(d, i));
   }
+  refresh();
+  getch();
+  io_display(d);
+  
 }
-
+//needs work
 void io_inspect_item(dungeon *d){
-  io_list_inv(d);
+  clear();
+  mvprintw(3, 5, "Your inventory:");
+  for(int i = 0; i < INVENTORY_SIZE; i++){
+    mvprintw(i + 4, 5, "%d: ", i);
+    mvprintw(i + 4, 8, io_inv_item_name(d, i));
+  }
   mvprintw(15, 5,"Enter the number of item you would like to inspect");
-  /*char * temp = d->inventory[getch()];
-*/
+  refresh();
+  // char * temp = d->inventory[getch()];
 }
 
+//WORKS
 void io_delete_item(dungeon *d){
-  io_list_inv(d);
+  clear();
+  mvprintw(3, 5, "Your inventory:");
+  for(int i = 0; i < INVENTORY_SIZE; i++){
+    mvprintw(i + 4, 5, "%d: ", i);
+    mvprintw(i + 4, 8, io_inv_item_name(d, i));
+  }
   mvprintw(15, 5,"Enter the number of item you would like to remove");
-  d->inventory[getch()] = NULL;
+  refresh();
+  d->inventory[getch()-48] = NULL;
+  io_display(d);
 }
 
+//WORKS!
 void io_drop_item(dungeon *d){
-  io_list_inv(d);
+  clear();
+  mvprintw(3, 5, "Your inventory:");
+  for(int i = 0; i < INVENTORY_SIZE; i++){
+    mvprintw(i + 4, 5, "%d: ", i);
+    mvprintw(i + 4, 8, io_inv_item_name(d, i));
+  }
   mvprintw(15, 5,"Enter the number of item you would like to drop");
-  int key = getch();
+  refresh();
+  int key = getch() - 48;
   d->objmap[d->PC->position[dim_y]][d->PC->position[dim_x]] = d->inventory[key];
   d->inventory[key] = NULL;
+  io_display(d);
 }
 
 void io_unequip_item(dungeon *d){
-
+  clear();
+  if(io_inv_room(d) + 1){
+    const char *j = "abcdefghijkl";
+    mvprintw(3, 5, "Your equipment:");
+    for(int i = 0; i < EQUIPMENT_SIZE; i++){
+      mvprintw(i + 4, 5, "%c: ", j[i]);
+      mvprintw(i + 4, 8, io_equipment_item_name(d, i));
+    }
+    mvprintw(17, 5,"Enter the letter of the item you would like to unequip");
+    refresh();
+    int slot = getch() - 97;
+    d->inventory[io_inv_room(d)] = d->eqiupment[slot];
+    d->eqiupment[slot] = NULL;
+    io_display(d);
+  }else{
+    mvprintw(1, 1, "You dont have any room in your inventory!");
+    refresh();
+    io_display(d);
+  }
 }
 
 void io_equip_item(dungeon *d){
@@ -1115,4 +1168,23 @@ void io_equip_item(dungeon *d){
 
 void io_look_monster(dungeon *d){
 
+}
+
+int io_inv_room(dungeon *d){
+  for(int i = 0; i < INVENTORY_SIZE; i++){
+    if(d->inventory[i] == NULL){
+      return i;
+    }
+  }
+  return -1;
+}
+
+int io_pickup_item(dungeon *d){
+  int slot = io_inv_room(d);
+  if(slot+1 && d->objmap[d->PC->position[dim_y]][d->PC->position[dim_x]]){
+    d->inventory[slot] = d->objmap[d->PC->position[dim_y]][d->PC->position[dim_x]];
+    d->objmap[d->PC->position[dim_y]][d->PC->position[dim_x]] = NULL;
+  } else {
+  }
+  return slot;
 }

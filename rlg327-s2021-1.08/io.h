@@ -18,5 +18,7 @@ void io_equip_item(dungeon *d);
 void io_look_monster(dungeon *d);
 const char * io_inv_item_name(dungeon *d, int item);
 const char * io_equipment_item_name(dungeon *d, int item);
+int io_inv_room(dungeon *d);
+int io_pickup_item(dungeon *d);
 
 #endif
