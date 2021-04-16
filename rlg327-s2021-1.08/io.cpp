@@ -1097,7 +1097,7 @@ void io_list_equipment(dungeon *d){
   io_display(d);
   
 }
-//needs work                                       DO THIS
+//needs work                                       DO THIS -------------------------------------------------------------------------------
 void io_inspect_item(dungeon *d){
   clear();
   mvprintw(3, 5, "Your inventory:");
@@ -1163,7 +1163,7 @@ void io_unequip_item(dungeon *d){
   }
 }
 
-//                                         DO THIS
+//                                         DO THIS --------------------------------------------------------------
 void io_equip_item(dungeon *d){
 
 }
@@ -1277,7 +1277,7 @@ void io_look_monster(dungeon *d){
         clear();
         mvprintw(0, 0, "Monster name: ");
         mvprintw(0, 15, character_get_name(d->character_map[dest[dim_y]][dest[dim_x]]));
-        mvprintw(1, 2, "MONST DESC HERE");  // ADD IT TO PRINT MONSTER DESCRIPTION HERE
+        mvprintw(1, 2, "MONST DESC HERE");  // ADD IT TO PRINT MONSTER DESCRIPTION HERE ------------------------------------------------
         refresh();
         getch();
       } else {
