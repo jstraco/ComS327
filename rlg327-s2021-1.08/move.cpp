@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <assert.h>
-
+#include "object.h"
 #include "dungeon.h"
 #include "heap.h"
 #include "move.h"
@@ -15,6 +15,7 @@
 #include "event.h"
 #include "io.h"
 #include "npc.h"
+#include "ncurses.h"
 
 void do_combat(dungeon *d, character *atk, character *def)
 {
@@ -54,6 +55,32 @@ void do_combat(dungeon *d, character *atk, character *def)
   //int part;
     if(atk == d->PC){
 
+      //player attack monster
+      int attack = 0;
+      attack = d->PC->damage->roll();
+      dice die;
+      for(int i = 0; i < 10; i++){
+        if(d->inventory[i] == NULL){
+          continue;
+        }
+        die.set_base(d->inventory[i]->get_damage_base());
+        die.set_sides(d->inventory[i]->get_damage_sides());
+        die.set_number(d->inventory[i]->get_damage_number());
+        attack += die.roll();
+      }
+      clear();
+      mvprintw(1, 1, "the monster hp is%d",def->hp);
+      refresh();
+      getch();
+      io_display(d);
+      def->hp -= attack;
+      if(def->hp <= 0 && (((npc *) def)->characteristics & NPC_BOSS)){
+        d->quit = 1;
+      }
+      else if(def->hp <= 0){
+        d->character_map[def->position[dim_y]][def->position[dim_x]] = NULL;
+        d->num_monsters--;
+      }
     }
     else{
       if(def != d->PC){
@@ -281,7 +308,7 @@ void do_combat(dungeon *d, character *atk, character *def)
         }
       }
       else{
-
+        // monster attacking pc
       }
     }
   /*if (def->alive) {
