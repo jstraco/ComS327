@@ -1167,10 +1167,7 @@ void io_equip_item(dungeon *d){
 
 }
 
-void io_look_monster(dungeon *d){
-
-}
-
+//WORKS
 int io_inv_room(dungeon *d){
   for(int i = 0; i < INVENTORY_SIZE; i++){
     if(d->inventory[i] == NULL){
@@ -1180,6 +1177,7 @@ int io_inv_room(dungeon *d){
   return -1;
 }
 
+//WORKS
 int io_pickup_item(dungeon *d){
   int slot = io_inv_room(d);
   if(slot+1 && d->objmap[d->PC->position[dim_y]][d->PC->position[dim_x]]){
@@ -1189,3 +1187,112 @@ int io_pickup_item(dungeon *d){
   }
   return slot;
 }
+//WOOOOOOOOOOOOOOOOOOOOO
+void io_look_monster(dungeon *d){
+
+  pair_t dest;
+  int c;
+
+  mvprintw(0, 0, "Choose a location, then 't' to select monster");
+
+  dest[dim_y] = d->PC->position[dim_y];
+  dest[dim_x] = d->PC->position[dim_x];
+
+  mvaddch(dest[dim_y], dest[dim_x], '*');
+  refresh();
+
+  do{       
+    switch ((c = getch())) {
+    case '7':
+    case 'y':
+    case KEY_HOME:
+      if (dest[dim_y] != 1) {
+        dest[dim_y]--;
+      }
+      if (dest[dim_x] != 1) {
+        dest[dim_x]--;
+      }
+      break;
+    case '8':
+    case 'k':
+    case KEY_UP:
+      if (dest[dim_y] != 1) {
+        dest[dim_y]--;
+      }
+      break;
+    case '9':
+    case 'u':
+    case KEY_PPAGE:
+      if (dest[dim_y] != 1) {
+        dest[dim_y]--;
+      }
+      if (dest[dim_x] != DUNGEON_X - 2) {
+        dest[dim_x]++;
+      }
+      break;
+    case '6':
+    case 'l':
+    case KEY_RIGHT:
+      if (dest[dim_x] != DUNGEON_X - 2) {
+        dest[dim_x]++;
+      }
+      break;
+    case '3':
+    case 'n':
+    case KEY_NPAGE:
+      if (dest[dim_y] != DUNGEON_Y - 2) {
+        dest[dim_y]++;
+      }
+      if (dest[dim_x] != DUNGEON_X - 2) {
+        dest[dim_x]++;
+      }
+      break;
+    case '2':
+    case 'j':
+    case KEY_DOWN:
+      if (dest[dim_y] != DUNGEON_Y - 2) {
+        dest[dim_y]++;
+      }
+      break;
+    case '1':
+    case 'b':
+    case KEY_END:
+      if (dest[dim_y] != DUNGEON_Y - 2) {
+        dest[dim_y]++;
+      }
+      if (dest[dim_x] != 1) {
+        dest[dim_x]--;
+      }
+      break;
+    case '4':
+    case 'h':
+    case KEY_LEFT:
+      if (dest[dim_x] != 1) {
+        dest[dim_x]--;
+      }
+      break;
+    case 't':
+      if(d->character_map[dest[dim_y]+1][dest[dim_x]+1]){
+        clear();
+        mvprintw(0, 0, "Monster name: ");
+        mvprintw(0, 15, character_get_name(d->character_map[dest[dim_y]][dest[dim_x]]));
+        refresh();
+        getch();
+      } else {
+        clear();
+        mvprintw(0, 0, "debug: ");
+        refresh();
+        getch();
+      }
+      break;
+    }
+
+  io_display(d);
+  mvaddch(dest[dim_y], dest[dim_x], '*');
+  refresh();
+
+  }while(c != 27);
+  
+  io_display(d);
+}
+

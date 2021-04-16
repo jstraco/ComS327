@@ -504,7 +504,7 @@ event *new_event(new_event27,701
 event *update_event(update_event44,995
 void event_delete(52,1137
 
-io.cpp,1521
+io.cpp,1580
 static dungeon *thedungeon;thedungeon17,288
 typedef struct io_message 19,317
   char msg[msg22,498
@@ -534,16 +534,18 @@ static bool is_vowel(766,23380
 static void io_list_monsters_display(772,23559
 static void io_list_monsters(838,26176
 void io_handle_input(868,26941
-const char * io_inv_item_name(1053,32142
-const char * io_equipment_item_name(1061,32309
-void io_list_inv(1069,32481
-void io_list_equipment(1078,32692
-void io_inspect_item(1087,32915
-void io_delete_item(1094,33086
-void io_drop_item(1100,33243
-void io_unequip_item(1108,33494
-void io_equip_item(1112,33532
-void io_look_monster(1116,33568
+const char * io_inv_item_name(1057,32215
+const char * io_equipment_item_name(1065,32382
+void io_list_inv(1074,32562
+void io_list_equipment(1087,32822
+void io_inspect_item(1101,33138
+void io_delete_item(1114,33488
+void io_drop_item(1128,33847
+void io_unequip_item(1144,34296
+void io_equip_item(1166,34931
+int io_inv_room(1171,34975
+int io_pickup_item(1181,35130
+void io_look_monster(1191,35477
 
 move.cpp,244
 void do_combat(20,323
