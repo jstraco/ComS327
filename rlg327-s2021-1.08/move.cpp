@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <assert.h>
-
+#include "object.h"
 #include "dungeon.h"
 #include "heap.h"
 #include "move.h"
@@ -15,58 +15,316 @@
 #include "event.h"
 #include "io.h"
 #include "npc.h"
+#include "ncurses.h"
 
 void do_combat(dungeon *d, character *atk, character *def)
 {
-  int can_see_atk, can_see_def;
-  const char *organs[] = {
-    "liver",                   /*  0 */
-    "pancreas",                /*  1 */
-    "heart",                   /*  2 */
-    "eye",                     /*  3 */
-    "arm",                     /*  4 */
-    "leg",                     /*  5 */
-    "intestines",              /*  6 */
-    "gall bladder",            /*  7 */
-    "lungs",                   /*  8 */
-    "hand",                    /*  9 */
-    "foot",                    /* 10 */
-    "spinal cord",             /* 11 */
-    "pituitary gland",         /* 12 */
-    "thyroid",                 /* 13 */
-    "tongue",                  /* 14 */
-    "bladder",                 /* 15 */
-    "diaphram",                /* 16 */
-    "stomach",                 /* 17 */
-    "pharynx",                 /* 18 */
-    "esophagus",               /* 19 */
-    "trachea",                 /* 20 */
-    "urethra",                 /* 21 */
-    "spleen",                  /* 22 */
-    "ganglia",                 /* 23 */
-    "ear",                     /* 24 */
-    "subcutaneous tissue"      /* 25 */
-    "cerebellum",              /* 26 */ /* Brain parts begin here */
-    "hippocampus",             /* 27 */
-    "frontal lobe",            /* 28 */
-    "brain",                   /* 29 */
-  };
-  int part;
+  //int can_see_atk, can_see_def;
+  // const char *organs[] = {
+  //   "liver",                   /*  0 */
+  //   "pancreas",                /*  1 */
+  //   "heart",                   /*  2 */
+  //   "eye",                     /*  3 */
+  //   "arm",                     /*  4 */
+  //   "leg",                     /*  5 */
+  //   "intestines",              /*  6 */
+  //   "gall bladder",            /*  7 */
+  //   "lungs",                   /*  8 */
+  //   "hand",                    /*  9 */
+  //   "foot",                    /* 10 */
+  //   "spinal cord",             /* 11 */
+  //   "pituitary gland",         /* 12 */
+  //   "thyroid",                 /* 13 */
+  //   "tongue",                  /* 14 */
+  //   "bladder",                 /* 15 */
+  //   "diaphram",                /* 16 */
+  //   "stomach",                 /* 17 */
+  //   "pharynx",                 /* 18 */
+  //   "esophagus",               /* 19 */
+  //   "trachea",                 /* 20 */
+  //   "urethra",                 /* 21 */
+  //   "spleen",                  /* 22 */
+  //   "ganglia",                 /* 23 */
+  //   "ear",                     /* 24 */
+  //   "subcutaneous tissue"      /* 25 */
+  //   "cerebellum",              /* 26 */ /* Brain parts begin here */
+  //   "hippocampus",             /* 27 */
+  //   "frontal lobe",            /* 28 */
+  //   "brain",                   /* 29 */
+  // };
+  //int part;
+    if(atk == d->PC){
 
-  if (def->alive) {
+      //player attack monster
+      int attack = 0;
+      attack = d->PC->damage->roll();
+      dice die;
+      for(int i = 0; i < 10; i++){
+        if(d->inventory[i] == NULL){
+          continue;
+        }
+        die.set_base(d->inventory[i]->get_damage_base());
+        die.set_sides(d->inventory[i]->get_damage_sides());
+        die.set_number(d->inventory[i]->get_damage_number());
+        attack += die.roll();
+      }
+      clear();
+      mvprintw(1, 1, "the monster hp is%d",def->hp);
+      refresh();
+      getch();
+      io_display(d);
+      def->hp -= attack;
+      if(def->hp <= 0 && (((npc *) def)->characteristics & NPC_BOSS)){
+        d->quit = 1;
+      }
+      else if(def->hp <= 0){
+        d->character_map[def->position[dim_y]][def->position[dim_x]] = NULL;
+        d->num_monsters--;
+      }
+    }
+    else{
+      if(def != d->PC){
+        int loop = 1;
+        while(loop){
+          int move_point = rand_range(1,8);
+          pair_t next;
+          switch (move_point)
+          {
+          case 1:
+            next[dim_y] = def->position[dim_y]-1;
+            next[dim_x] = def->position[dim_x]-1;
+            if(!charpair(next)){
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = NULL;
+                def->position[dim_y] = next[dim_y];
+                def->position[dim_x] = next[dim_x];
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = def;
+                loop = 0;
+            }
+            else{
+              if((next[dim_y] == atk->position[dim_y] )&& (next[dim_x] == atk->position[dim_x])){
+                atk->position[dim_y] = def->position[dim_y];
+                atk->position[dim_x] = def->position[dim_x];
+                d->character_map[atk->position[dim_y]][atk->position[dim_x]] = atk;
+                def->position[dim_y] = next[dim_y];
+                def->position[dim_x] = next[dim_x];
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = def;
+                loop = 0;
+              }
+              else{
+                //do nothing, since dont want to swap random
+              }
+            }
+            break;
+          case 2:
+            next[dim_y] = def->position[dim_y]-1;
+            next[dim_x] = def->position[dim_x];
+            next[dim_y] = def->position[dim_y]-1;
+            next[dim_x] = def->position[dim_x]-1;
+            if(!charpair(next)){
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = NULL;
+                def->position[dim_y] = next[dim_y];
+                def->position[dim_x] = next[dim_x];
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = def;
+                loop = 0;
+            }
+            else{
+              if((next[dim_y] == atk->position[dim_y] )&& (next[dim_x] == atk->position[dim_x])){
+                atk->position[dim_y] = def->position[dim_y];
+                atk->position[dim_x] = def->position[dim_x];
+                d->character_map[atk->position[dim_y]][atk->position[dim_x]] = atk;
+                def->position[dim_y] = next[dim_y];
+                def->position[dim_x] = next[dim_x];
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = def;
+                loop = 0;
+              }
+              else{
+                //do nothing, since dont want to swap random
+              }
+            }
+            break;
+          case 3:
+            next[dim_y] = def->position[dim_y]-1;
+            next[dim_x] = def->position[dim_x]+1;
+            next[dim_y] = def->position[dim_y]-1;
+            next[dim_x] = def->position[dim_x]-1;
+            if(!charpair(next)){
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = NULL;
+                def->position[dim_y] = next[dim_y];
+                def->position[dim_x] = next[dim_x];
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = def;
+                loop = 0;
+            }
+            else{
+              if((next[dim_y] == atk->position[dim_y] )&& (next[dim_x] == atk->position[dim_x])){
+                atk->position[dim_y] = def->position[dim_y];
+                atk->position[dim_x] = def->position[dim_x];
+                d->character_map[atk->position[dim_y]][atk->position[dim_x]] = atk;
+                def->position[dim_y] = next[dim_y];
+                def->position[dim_x] = next[dim_x];
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = def;
+                loop = 0;
+              }
+              else{
+                //do nothing, since dont want to swap random
+              }
+            }
+            break;
+          case 4:
+            next[dim_y] = def->position[dim_y];
+            next[dim_x] = def->position[dim_x]-1;
+            next[dim_y] = def->position[dim_y]-1;
+            next[dim_x] = def->position[dim_x]-1;
+            if(!charpair(next)){
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = NULL;
+                def->position[dim_y] = next[dim_y];
+                def->position[dim_x] = next[dim_x];
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = def;
+                loop = 0;
+            }
+            else{
+              if((next[dim_y] == atk->position[dim_y] )&& (next[dim_x] == atk->position[dim_x])){
+                atk->position[dim_y] = def->position[dim_y];
+                atk->position[dim_x] = def->position[dim_x];
+                d->character_map[atk->position[dim_y]][atk->position[dim_x]] = atk;
+                def->position[dim_y] = next[dim_y];
+                def->position[dim_x] = next[dim_x];
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = def;
+                loop = 0;
+              }
+              else{
+                //do nothing, since dont want to swap random
+              }
+            }
+            break;
+          case 5:
+            next[dim_y] = def->position[dim_y];
+            next[dim_x] = def->position[dim_x]+1;
+            next[dim_y] = def->position[dim_y]-1;
+            next[dim_x] = def->position[dim_x]-1;
+            if(!charpair(next)){
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = NULL;
+                def->position[dim_y] = next[dim_y];
+                def->position[dim_x] = next[dim_x];
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = def;
+                loop = 0;
+            }
+            else{
+              if((next[dim_y] == atk->position[dim_y] )&& (next[dim_x] == atk->position[dim_x])){
+                atk->position[dim_y] = def->position[dim_y];
+                atk->position[dim_x] = def->position[dim_x];
+                d->character_map[atk->position[dim_y]][atk->position[dim_x]] = atk;
+                def->position[dim_y] = next[dim_y];
+                def->position[dim_x] = next[dim_x];
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = def;
+                loop = 0;
+              }
+              else{
+                //do nothing, since dont want to swap random
+              }
+            }
+            break;
+          case 6:
+            next[dim_y] = def->position[dim_y]+1;
+            next[dim_x] = def->position[dim_x]-1;
+            next[dim_y] = def->position[dim_y]-1;
+            next[dim_x] = def->position[dim_x]-1;
+            if(!charpair(next)){
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = NULL;
+                def->position[dim_y] = next[dim_y];
+                def->position[dim_x] = next[dim_x];
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = def;
+                loop = 0;
+            }
+            else{
+              if((next[dim_y] == atk->position[dim_y] )&& (next[dim_x] == atk->position[dim_x])){
+                atk->position[dim_y] = def->position[dim_y];
+                atk->position[dim_x] = def->position[dim_x];
+                d->character_map[atk->position[dim_y]][atk->position[dim_x]] = atk;
+                def->position[dim_y] = next[dim_y];
+                def->position[dim_x] = next[dim_x];
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = def;
+                loop = 0;
+              }
+              else{
+                //do nothing, since dont want to swap random
+              }
+            }
+            break;
+          case 7:
+            next[dim_y] = def->position[dim_y]+1;
+            next[dim_x] = def->position[dim_x];
+            next[dim_y] = def->position[dim_y]-1;
+            next[dim_x] = def->position[dim_x]-1;
+            if(!charpair(next)){
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = NULL;
+                def->position[dim_y] = next[dim_y];
+                def->position[dim_x] = next[dim_x];
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = def;
+                loop = 0;
+            }
+            else{
+              if((next[dim_y] == atk->position[dim_y] )&& (next[dim_x] == atk->position[dim_x])){
+                atk->position[dim_y] = def->position[dim_y];
+                atk->position[dim_x] = def->position[dim_x];
+                d->character_map[atk->position[dim_y]][atk->position[dim_x]] = atk;
+                def->position[dim_y] = next[dim_y];
+                def->position[dim_x] = next[dim_x];
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = def;
+                loop = 0;
+              }
+              else{
+                //do nothing, since dont want to swap random
+              }
+            }
+            break;
+          case 8:
+            next[dim_y] = def->position[dim_y]+1;
+            next[dim_x] = def->position[dim_x]+1;
+            next[dim_y] = def->position[dim_y]-1;
+            next[dim_x] = def->position[dim_x]-1;
+            if(!charpair(next)){
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = NULL;
+                def->position[dim_y] = next[dim_y];
+                def->position[dim_x] = next[dim_x];
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = def;
+                loop = 0;
+            }
+            else{
+              if((next[dim_y] == atk->position[dim_y] )&& (next[dim_x] == atk->position[dim_x])){
+                atk->position[dim_y] = def->position[dim_y];
+                atk->position[dim_x] = def->position[dim_x];
+                d->character_map[atk->position[dim_y]][atk->position[dim_x]] = atk;
+                def->position[dim_y] = next[dim_y];
+                def->position[dim_x] = next[dim_x];
+                d->character_map[def->position[dim_y]][def->position[dim_x]] = def;
+                loop = 0;
+              }
+              else{
+                //do nothing, since dont want to swap random
+              }
+            }
+            break;
+          }
+        }
+      }
+      else{
+        // monster attacking pc
+      }
+    }
+  /*if (def->alive) {
     def->alive = 0;
     charpair(def->position) = NULL;
     
     if (def != d->PC) {
-      d->num_monsters--;
+       d->num_monsters--;
     } else {
       if ((part = rand() % (sizeof (organs) / sizeof (organs[0]))) < 26) {
         io_queue_message("As %s%s eats your %s,", is_unique(atk) ? "" : "the ",
                          atk->name, organs[rand() % (sizeof (organs) /
                                                      sizeof (organs[0]))]);
         io_queue_message("   ...you wonder if there is an afterlife.");
-        /* Queue an empty message, otherwise the game will not pause for *
-         * player to see above.                                          */
+        * Queue an empty message, otherwise the game will not pause for *
+         * player to see above.                                          *
         io_queue_message("");
       } else {
         io_queue_message("Your last thoughts fade away as "
@@ -75,8 +333,8 @@ void do_combat(dungeon *d, character *atk, character *def)
                          atk->name, organs[part]);
         io_queue_message("");
       }
-      /* Queue an empty message, otherwise the game will not pause for *
-       * player to see above.                                          */
+      * Queue an empty message, otherwise the game will not pause for *
+       * player to see above.                                          *
       io_queue_message("");
     }
     atk->kills[kill_direct]++;
@@ -109,7 +367,7 @@ void do_combat(dungeon *d, character *atk, character *def)
                        is_unique(atk) ? "" : "the ", atk->name,
                        is_unique(def) ? "" : "the ", def->name);
     }
-  }
+  }*/
 }
 
 void move_character(dungeon *d, character *c, pair_t next)
