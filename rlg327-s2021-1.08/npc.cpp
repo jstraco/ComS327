@@ -9,7 +9,9 @@
 #include "path.h"
 #include "event.h"
 #include "pc.h"
-
+// std::string get_monster_description(character *c){
+//   return c->description;
+// }
 static uint32_t max_monster_cells(dungeon *d)
 {
   uint32_t i;

@@ -59,6 +59,7 @@ class npc : public character {
 };
 
 void gen_monsters(dungeon *d);
+//std::string get_monster_description(character *c);
 void npc_delete(npc *n);
 void npc_next_pos(dungeon *d, npc *c, pair_t next);
 uint32_t dungeon_has_npcs(dungeon *d);
