@@ -1,6 +1,44 @@
 RLG327 OBJECT DESCRIPTION 1
 
 BEGIN OBJECT
+NAME bitch ass bow
+TYPE RANGED
+WEIGHT 5+1d2
+COLOR CYAN
+DODGE 0+0d1
+VAL 5+0d1
+DAM 4+1d6
+DEF 0+0d1
+HIT 0+0d1
+SPEED 0+0d1
+DESC
+A bitch ass bow for a bitch ass.
+.
+ATTR 0+0d1
+RRTY 100
+ART FALSE
+END
+
+BEGIN OBJECT
+NAME bitch ass void ball
+TYPE RANGEDAOE
+WEIGHT 5+1d2
+COLOR CYAN
+DODGE 0+0d1
+VAL 500+0d1
+DAM 10+5d100
+DEF 0+0d1
+HIT 0+0d1
+SPEED 0+0d1
+DESC
+A bitch ass void ball for a bitch ass.
+.
+ATTR 0+0d1
+RRTY 100
+ART FALSE
+END
+
+BEGIN OBJECT
 NAME a NERF(R) dagger
 TYPE WEAPON
 COLOR MAGENTA
@@ -19,7 +57,7 @@ serve no functional purpose.  You could totally be a deadly assassin with a
 sweet blade like this.  Since it's so light, it won't encumber you.  It's
 made out of polyurethane foam.
 .
-RRTY 90
+RRTY 9
 ART FALSE
 END
 
@@ -39,7 +77,7 @@ DAM 314+15d92
 DODGE 0+0d1
 DEF 0+0d1
 SPEED 20+0d5
-RRTY 10
+RRTY 1
 ART TRUE
 END
 
@@ -61,7 +99,7 @@ long as Shirley doesn't show up wearing the same thing again.
 TYPE ARMOR
 COLOR MAGENTA
 WEIGHT 0+2d2
-RRTY 70
+RRTY 7
 ART FALSE
 END
 
@@ -82,7 +120,7 @@ major damage.
 TYPE BOOTS
 COLOR MAGENTA
 WEIGHT 0+2d2
-RRTY 80
+RRTY 8
 ART FALSE
 END
 
@@ -102,7 +140,7 @@ A heavy chainmail head covering.
 .
 TYPE HELMET
 COLOR BLACK
-RRTY 100
+RRTY 1
 ART FALSE
 END
 
@@ -123,7 +161,7 @@ ATTR 0+0d1
 DEF 20+3d8
 SPEED 10+0d1
 COLOR YELLOW
-RRTY 30
+RRTY 3
 ART TRUE
 END
 
@@ -143,7 +181,7 @@ ATTR 0+0d1
 DAM 0+0d1
 SPEED 0+0d1
 COLOR CYAN
-RRTY 20
+RRTY 2
 ART TRUE
 END
 
@@ -184,7 +222,7 @@ A short wooden stick topped with an oil-soaked cloth, perfect for lighting
 your way through the dungeon.
 .
 ATTR 0+1d3
-RRTY 100
+RRTY 1
 ART FALSE
 END
 
@@ -206,7 +244,7 @@ is capable of producing an incredible 4100 lumens of intense white light. Use
 this power to guide your way home, light a fire, or even fry an egg!
 .
 ATTR 200+0d1
-RRTY 30
+RRTY 3
 ART FALSE
 END
 
@@ -265,7 +303,7 @@ DESC
 Not only is it stylish, but it will let you move faster.
 .
 ATTR 0+0d1
-RRTY 80
+RRTY 8
 ART FALSE
 END
 
@@ -284,7 +322,7 @@ DESC
 Not only does it look great, but it will let you hit harder.
 .
 ATTR 0+0d1
-RRTY 80
+RRTY 8
 ART FALSE
 END
 
@@ -304,7 +342,7 @@ The hammer of Thor, one of the most fearsome and powerful weapons in
 existence, capable of leveling mountains.
 .
 ATTR 10+0d1
-RRTY 50
+RRTY 5
 ART TRUE
 END
 
@@ -323,7 +361,7 @@ DESC
 A magical, elven blade, it glows blue when orcs are near.
 .
 ATTR 10+0d1
-RRTY 80
+RRTY 8
 ART TRUE
 END
 
@@ -342,7 +380,7 @@ DESC
 Put these on and you'll be bad like Michael Jackson.
 .
 ATTR 0+0d1
-RRTY 80
+RRTY 8
 ART FALSE
 END
 
@@ -364,44 +402,6 @@ Atlantic Ocean (thanks, Rose).  Little did she know, it's imbued with
 fantastic magical powers!
 .
 ATTR 0+0d1
-RRTY 80
+RRTY 8
 ART TRUE
-END
-
-BEGIN OBJECT
-NAME bitch ass bow
-TYPE RANGED
-WEIGHT 5+1d2
-COLOR GREEN
-DODGE 0+0d1
-VAL 5+0d1
-DAM 4+1d6
-DEF 0+0d1
-HIT 0+0d1
-SPEED 0+0d1
-DESC
-A bitch ass bow for a bitch ass
-.
-ATTR 0+0d1
-RRTY 100
-ART FALSE
-END
-
-BEGIN OBJECT
-NAME bitch ass void ball
-TYPE RANGEDAOE
-WEIGHT 5+1d2
-COLOR BLACK
-DODGE 0+0d1
-VAL 500+0d1
-DAM 10+5d100
-DEF 0+0d1
-HIT 0+0d1
-SPEED 0+0d1
-DESC
-A bitch ass void ball for a bitch ass
-.
-ATTR 0+0d1
-RRTY 100
-ART FALSE
 END
