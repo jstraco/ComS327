@@ -92,6 +92,7 @@ static const struct {
   type_lu_entry(FOOD),
   type_lu_entry(WAND),
   type_lu_entry(CONTAINER),
+  type_lu_entry(RANGEDAOE),
   { 0, objtype_no_type }
 };
 
