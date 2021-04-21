@@ -25,6 +25,9 @@ public:
 };
 
 int final_battle(uint32_t dead);
-int play_round(int round);
+int select_round(int round);
+int play_round(int bulletCount, bullet bullets[40]);
+int validate_pass(char c);
+void update_board(bullet bullets[40]);
 
 #endif

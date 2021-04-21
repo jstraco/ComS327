@@ -64,6 +64,7 @@ int select_round(int round) {
     int bulletCount;
     switch(round) {
         case 0:
+        {
             bulletCount = BOARD_Y - 6;
             for(int i = 0; i < bulletCount; i++) {
                 bullets[i].type = vertical;
@@ -80,7 +81,9 @@ int select_round(int round) {
                 bullets[i].position[dim_x] = x;
             }
             break;
+        }
         case 1:
+        {
             bulletCount = BOARD_Y;
             for(int i = 0; i < bulletCount; i++) {
                 bullets[i].type = vertical;
@@ -96,7 +99,9 @@ int select_round(int round) {
                 bullets[i].position[dim_x] = i;
             }
             break;
+        }
         case 2:
+        {
             bulletCount = BOARD_X - 4;
             for(int i = 0; i < bulletCount / 2; i++) {
                 bullets[i].type = horizontal;
@@ -108,8 +113,11 @@ int select_round(int round) {
                 bullets[i].bouncy = 1;
                 bullets[i].direction = -1;
             }
+            //TODO: place bullets
             break;
+        }
         case 3:
+        {
             bulletCount = 16;
             for(int i = 0; i < bulletCount / 2; i++) {
                 bullets[i].type = horizontal;
@@ -121,7 +129,9 @@ int select_round(int round) {
                 bullets[i].bouncy = 1;
                 bullets[i].direction = -1;
             }
+            //TODO: place bullets
             break;
+        }
         default:
             clear();
             mvprintw(7, 15, "Round Error");
@@ -129,16 +139,13 @@ int select_round(int round) {
             getch();
             break;
     }
-    return play_round(bulletCount, static_cast<bullet*>(bullets));
+    return play_round(bulletCount, bullets);
 }
 
-void update_board() {
+void update_board(bullet bullets[40]) {
     clear();
+    //TODO
     refresh();
-}
-
-void place_bullet(bullet b, uint32_t y, uint32_t x) {
-    
 }
 
 int play_round(int bulletCount, bullet bullets[40]) {
@@ -206,7 +213,7 @@ int play_round(int bulletCount, bullet bullets[40]) {
                     }
                 }
                 userResponseTurn = 0;
-                update_board();
+                update_board(bullets);
                 bulletTurn = time(NULL);
             }
         }
