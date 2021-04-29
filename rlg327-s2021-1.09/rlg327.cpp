@@ -11,6 +11,7 @@
 #include "utils.h"
 #include "io.h"
 #include "object.h"
+#include "boss.h"
 
 const char *victory =
   "\n                                       o\n"
@@ -231,6 +232,9 @@ int main(int argc, char *argv[])
   while (pc_is_alive(&d) && boss_is_alive(&d) && !d.quit) {
     do_moves(&d);
   }
+  
+  final_battle(d.PC->kills[kill_direct]);
+  
   io_display(&d);
 
   io_reset_terminal();
