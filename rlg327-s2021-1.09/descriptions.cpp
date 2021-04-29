@@ -117,6 +117,7 @@ const char object_symbol[] = {
   ',', /* objtype_FOOD */
   '-', /* objtype_WAND */
   '%', /* objtype_CONTAINER */
+  '+', /* objtype_RANGEDAOE */
 };
 
 static inline void eat_whitespace(std::ifstream &f)

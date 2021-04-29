@@ -562,9 +562,9 @@ uint32_t ranged_attack(dungeon *d){
     return 0;
   }
 
-  io_display(d);
+  //io_display(d);
 
-  mvprintw(0, 0, "Choose a monster.  'g' or '.' to select; 'ESC' to cancel.");
+  mvprintw(0, 0, "Choose a location for attack.  'g' or '.' to select; 'ESC' to cancel.");
 
   dest[dim_y] = d->PC->position[dim_y];
   dest[dim_x] = d->PC->position[dim_x];
@@ -708,10 +708,7 @@ uint32_t ranged_attack(dungeon *d){
       }
       break;
     }
-  } while (((c == 'g' || c == '.') &&
-            (!charpair(dest) || charpair(dest) == d->PC)) ||
-           (c != 'g' && c != '.' && c != 27 /* ESC */));
-
+  } while (c != 'g' && c != '.' && c != 27 /* ESC */);
   if (c == 27 /* ESC */) {
     io_display(d);
     return 1;
@@ -721,33 +718,22 @@ uint32_t ranged_attack(dungeon *d){
   int numberOfMonsters = 0;
   pair_t monster_location;
 
-  clear();
-  mvprintw(0, 0, "test 1");
-  refresh();
-  getch();
-
-  if(d->PC->eq[objtype_RANGED]->get_type() == objtype_RANGEDAOE){
-
-    clear();
-  mvprintw(0, 0, "test 2");
-  refresh();
-  getch();
-
-    for(int i = dest[dim_y]-1; i < dest[dim_y]+1; i++){
-      for(int j = dest[dim_x]-1; i < dest[dim_x]+1; i++){
+  if(d->PC->eq[eq_slot_ranged]->get_type() == objtype_RANGEDAOE){
+    for(int i = dest[dim_y]-1; i <= dest[dim_y]+1; i++){
+      for(int j = dest[dim_x]-1; j <= dest[dim_x]+1; j++){
         monster_location[dim_y] = i;
         monster_location[dim_x] = j;
-        if(charpair(monster_location) == NULL || charpair(monster_location) == d->PC){
+        if(!charpair(monster_location) || charpair(monster_location) == d->PC){
           continue;
         }
         else{
           damage = 0;
           numberOfMonsters++;
-          for (int i = damage = 0; i < num_eq_slots; i++) {
-            if (i == eq_slot_ranged && !d->PC->eq[i]) {
+          for (int f = damage = 0; f < num_eq_slots; f++) {
+            if (f == eq_slot_ranged && !d->PC->eq[f]) {
               damage += d->PC->damage->roll();
-            } else if (d->PC->eq[i]) {
-              damage += d->PC->eq[i]->roll_dice();
+            } else if (d->PC->eq[f]) {
+              damage += d->PC->eq[f]->roll_dice();
             }
           }
           totalDamage += damage;
@@ -759,8 +745,11 @@ uint32_t ranged_attack(dungeon *d){
     io_queue_message("You hit %i monsters for a total of %i damage",numberOfMonsters,totalDamage);
   }
   else{
-    
-    for (int i = damage = 0; i < num_eq_slots; i++) {
+    if(charpair(dest) == NULL){
+      io_queue_message("You missed, this does not have AOE");
+    }
+    else{
+      for (int i = damage = 0; i < num_eq_slots; i++) {
         if (i == eq_slot_ranged && !d->PC->eq[i]) {
           damage += d->PC->damage->roll();
         } else if (d->PC->eq[i]) {
@@ -770,14 +759,10 @@ uint32_t ranged_attack(dungeon *d){
     charpair(dest)->hp = charpair(dest)->hp - damage;
       io_queue_message("You hit %s%s for %d.", is_unique(charpair(dest)) ? "" : "the ",
                        charpair(dest)->name, damage);
+    }
+    
   }
-  mvprintw(4, 0, "Hit any key to continue. ");
-
-  refresh();
-  
-  getch();
-
-  io_display(d);
+  //io_display(d);
 
   return 0; 
 }
@@ -1791,6 +1776,7 @@ void io_handle_input(dungeon *d)
       break;
     case 'r':
       ranged_attack(d);
+      fail_code = 0;
       break;
     case 'Q':
       d->quit = 1;

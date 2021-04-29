@@ -35,7 +35,7 @@ typedef enum object_type {
   objtype_FOOD,
   objtype_WAND,
   objtype_CONTAINER,
-  objtype_RANGEDAOE = 3
+  objtype_RANGEDAOE
 } object_type_t;
 
 extern const char object_symbol[];
